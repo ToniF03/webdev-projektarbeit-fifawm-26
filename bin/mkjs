@@ -1,0 +1,158 @@
+#!/usr/bin/env bash
+set -eu
+
+# Created on: 2026-05-18
+# Author: Finn Konrad
+# License: MIT
+# Description: A Bash script that creates a JS template file.
+
+error (){
+    printf "%s\n" "ERROR ${2:-1}" >&2
+    printf "%s\n" "$1" >&2
+    exit "${2:-1}"
+}
+
+var_check (){
+    if [ ! -v "$1" ] || [ -z "${!1}" ]; then
+        error "Variable \"$1\" is not set." 2
+    fi
+}
+
+conf_dir="$(dirname "$0")/config"
+conf_file="${conf_dir}/mkjs.conf"
+
+if [ ! -f "$conf_file" ]; then
+    error "Config \"${conf_file}\" not found." 1
+fi
+
+# shellcheck source=/dev/null
+source "$conf_file"
+
+var_arr=(
+    "DATE" "AUTHOR" "LICENSE" "DESCRIPTION"
+    "TEMPLATE_CLASS" "TEMPLATE_FETCH_API" "TEMPLATE_DISPATCH_EVENT" "TEMPLATE_EVENT_LISTENER" "TEMPLATE_VITEST_TEST"
+)
+
+for var in "${var_arr[@]}"; do
+    var_check "$var"
+done
+
+if [ $# -lt 1 ]; then
+    error "Usage: mkjs [FILENAME(S)]" 3
+fi
+
+tmp=$(mktemp)
+trap 'rm -f "$tmp"' EXIT
+: > "$tmp"
+
+cat << END >> "$tmp"
+/*
+* Created on: ${DATE}
+* Author(s): ${AUTHOR}
+* License: ${LICENSE}
+* Description: ${DESCRIPTION}
+*/
+
+END
+
+[ "$TEMPLATE_VITEST_TEST" = "true" ] && cat << END >> "$tmp"
+import { describe, beforeEach, afterEach, test, expect } from 'vitest';
+
+describe('Test group', () => {
+
+    let value = 42;
+
+    beforeEach(() => {
+        console.log('Runs before each test().');
+    })
+    afterEach(() => {
+        console.log('Runs after each test().');
+    })
+
+    test('Test case', () => {
+        expect(value).toBe(42);
+    })
+})
+
+END
+
+[ "$TEMPLATE_CLASS" = "true" ] && cat << END >> "$tmp"
+export class Template {
+
+    #privateMember;
+
+    constructor(parameter = 42) {
+        this.#privateMember = parameter;
+    }
+
+    static staticMethod (){
+        console.log('42');
+    }
+    #privateMethod (){
+        console.log(this.#privateMember);
+    }
+    publicMethod (){
+        this.#privateMethod();
+    }
+}
+
+END
+
+[ "$TEMPLATE_EVENT_LISTENER" = "true" ] && cat << END >> "$tmp"
+document.addEventListener('click', () => {
+    console.log('Event triggered.');
+})
+
+END
+
+[ "$TEMPLATE_FETCH_API" = "true" ] && cat << END >> "$tmp"
+async function fetchData (url){
+    try {
+        const response = await fetch(url);
+        if (!response.ok){
+            throw new Error(\`Server Error. [CODE:\${response.status}]\`);
+        }
+        const data = await response.json();
+        return data;
+    }
+    catch (msg){
+        console.error(msg);
+    }
+}
+fetchData('URL_PLACEHOLDER');
+
+END
+
+[ "$TEMPLATE_DISPATCH_EVENT" = "true" ] && cat << END >> "$tmp"
+function dispatchCustomEvent(name){
+    window.dispatchEvent(new CustomEvent(name));
+}
+dispatchCustomEvent('EVENT_PLACEHOLDER');
+
+END
+
+while [ "$#" -gt 0 ]; do
+
+    if [ -z "$1" ]; then
+        error "Empty file name." 4
+    elif [ -e "$1" ]; then
+        error "\"${1}\" already exists." 5
+    fi
+
+    file="$1"
+    dir="$(dirname "$1")"
+
+    if [ ! -d "$dir" ]; then
+        error "Directory \"${dir}\" not found." 6
+    elif [ ! -w "$dir" ]; then
+        error "Missing write permission for \"${dir}\"." 7
+    elif [ ! -x "$dir" ]; then
+        error "Missing execute permission for \"${dir}\"." 8
+    fi
+
+    cp "$tmp" "$file"
+
+    shift
+done
+
+exit 0

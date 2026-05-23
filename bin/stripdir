@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+set -eu
+
+# Created on: 2026-05-19
+# Author: Finn Konrad
+# License: MIT
+# Description: A Bash script that strips all EXIF ​​data from files in a directory and its subdirectories.
+
+error (){
+    printf "%s\n" "ERROR ${2:-1}" >&2
+    printf "%s\n" "$1" >&2
+    exit "${2:-1}"
+}
+
+warning (){
+    printf "%s\n" "WARNING" >&2
+    printf "%s\n" "$1" >&2
+}
+
+info (){
+    printf "%s\n" "INFO" >&2
+    printf "%s\n" "$1" >&2
+}
+
+check_dependency (){
+    if ! command -v "$1" >/dev/null 2>&1; then
+        error "Command \"${1}\" not found." 1
+    fi
+}
+
+dependencies=("exiftool")
+
+for dependency in "${dependencies[@]}"; do
+    check_dependency "$dependency"
+done
+
+if [ "$#" -lt 1 ]; then
+    error "Usage: stripdir [DIRNAME(S)]" 2
+fi
+
+results=$(mktemp)
+trap 'rm -f "$results"' EXIT
+
+error_counter="0"
+while [ "$#" -gt 0 ]; do
+
+    if [ ! -e "$1" ]; then
+        error "Directory \"${1}\" not found." 3
+    elif [ ! -d "$1" ]; then
+        error "\"${1}\" is not a directory." 4
+    fi
+
+    dir="$1"
+
+    : > "$results"
+
+    find "$dir" -type f 2>/dev/null > "$results"
+
+    if [ ! -s "$results" ]; then
+        warning "Directory \"${dir}\" has nothing to strip."
+    else
+        while IFS= read -r file; do
+            exiftool -all= -overwrite_original "$file" 2>/dev/null >&2 || error_counter=$((error_counter + 1))
+        done <"$results"
+    fi
+
+    shift
+done
+
+if [ "$error_counter" -eq 1 ]; then
+    info "${error_counter} file was not stripped due to unsupported format."
+elif [ "$error_counter" -gt 1 ]; then
+    info "${error_counter} files were not stripped due to unsupported format."
+fi
+
+exit 0
