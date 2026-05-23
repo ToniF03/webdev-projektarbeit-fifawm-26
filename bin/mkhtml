@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+set -eu
+
+# Created on: 2026-05-18
+# Author: Finn Konrad
+# License: MIT
+# Description: A Bash script that creates an HTML template file.
+
+error (){
+    printf "%s\n" "ERROR ${2:-1}" >&2
+    printf "%s\n" "$1" >&2
+    exit "${2:-1}"
+}
+
+var_check (){
+    if [ ! -v "$1" ] || [ -z "${!1}" ]; then
+        error "Variable \"$1\" is not set." 2
+    fi
+}
+
+conf_dir="$(dirname "$0")/config"
+conf_file="${conf_dir}/mkhtml.conf"
+
+if [ ! -f "$conf_file" ]; then
+    error "Config \"${conf_file}\" not found." 1
+fi
+
+# shellcheck source=/dev/null
+source "$conf_file"
+
+var_arr=("STYLESHEET" "SCRIPT" "AUTHOR" "TITLE" "KEYWORDS" "DESCRIPTION" "TYPE" "URL" "IMAGE" "FAVICON")
+
+for var in "${var_arr[@]}"; do
+    var_check "$var"
+done
+
+if [ $# -lt 1 ]; then
+    error "Usage: mkhtml [FILENAME(S)]" 3
+fi
+
+tmp=$(mktemp)
+trap 'rm -f "$tmp"' EXIT
+
+cat << END > "$tmp"
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <!-- Browser Window -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="${STYLESHEET}">
+    <script type="module" src="${SCRIPT}"></script>
+
+    <!-- SEO -->
+    <title>${TITLE}</title>
+    <meta name="keywords" content="${KEYWORDS}">
+    <meta name="description" content="${DESCRIPTION}">
+    <meta name="author" content="${AUTHOR}">
+
+    <!-- Open Graph -->
+    <meta property="og:locale" content="de_DE">
+    <meta property="og:type" content="${TYPE}">
+    <meta property="og:url" content="${URL}">
+    <meta property="og:title" content="${TITLE}">
+    <meta property="og:description" content="${DESCRIPTION}">
+    <meta property="og:image" content="${IMAGE}">
+
+    <!-- Multimedia -->
+    <link rel="icon" type="image/svg+xml" href="${FAVICON}">
+</head>
+<body>
+
+</body>
+</html>
+END
+
+while [ "$#" -gt 0 ]; do
+
+    if [ -z "$1" ]; then
+        error "Empty file name." 4
+    elif [ -e "$1" ]; then
+        error "\"${1}\" already exists." 5
+    fi
+
+    file="$1"
+    dir="$(dirname "$1")"
+
+    if [ ! -d "$dir" ]; then
+        error "Directory \"${dir}\" not found." 6
+    elif [ ! -w "$dir" ]; then
+        error "Missing write permission for \"${dir}\"." 7
+    elif [ ! -x "$dir" ]; then
+        error "Missing execute permission for \"${dir}\"." 8
+    fi
+
+    cp "$tmp" "$file"
+
+    shift
+done
+
+exit 0

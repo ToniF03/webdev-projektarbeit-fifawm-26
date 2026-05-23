@@ -1,0 +1,134 @@
+#!/usr/bin/env bash
+set -eu
+
+# Created on: 2026-05-18
+# Author: Finn Konrad
+# License: MIT
+# Description: A Bash script that creates a CSS template file.
+
+error (){
+    printf "%s\n" "ERROR ${2:-1}" >&2
+    printf "%s\n" "$1" >&2
+    exit "${2:-1}"
+}
+
+var_check (){
+    if [ ! -v "$1" ] || [ -z "${!1}" ]; then
+        error "Variable \"$1\" is not set." 2
+    fi
+}
+
+conf_dir="$(dirname "$0")/config"
+conf_file="${conf_dir}/mkcss.conf"
+
+if [ ! -f "$conf_file" ]; then
+    error "Config \"${conf_file}\" not found." 1
+fi
+
+# shellcheck source=/dev/null
+source "$conf_file"
+
+var_arr=(
+    "DATE" "AUTHOR" "LICENSE" "DESCRIPTION"
+    "SMOOTH_SCROLLING" "SET_BORDER_BOX" "RESET_PADDING" "RESET_MARGIN"
+    "TEMPLATE_FOCUS" "TEMPLATE_SELECTION" "TEMPLATE_IMPORT" "TEMPLATE_MEDIA_QUERY" "TEMPLATE_GLOBAL_VARIABLE"
+)
+
+for var in "${var_arr[@]}"; do
+    var_check "$var"
+done
+
+if [ $# -lt 1 ]; then
+    error "Usage: mkcss [FILENAME(S)]" 3
+fi
+
+tmp=$(mktemp)
+trap 'rm -f "$tmp"' EXIT
+: > "$tmp"
+
+write_content (){
+    if [ "$#" -gt 0 ]; then
+        printf "%s\n" "$1" >> "$tmp"
+    else
+        cat >> "$tmp"
+    fi
+}
+
+if [ "$TEMPLATE_IMPORT" = "true" ]; then
+    write_content "@import url('URL_PLACEHOLDER');"
+    write_content ''
+fi
+
+cat << END | write_content
+/*
+* Created on: ${DATE}
+* Author(s): ${AUTHOR}
+* License: ${LICENSE}
+* Description: ${DESCRIPTION}
+*/
+
+END
+
+if [ "$TEMPLATE_GLOBAL_VARIABLE" = "true" ]; then
+    write_content ':root {--variable: 42;}'
+    write_content ''
+fi
+
+if [ "$SMOOTH_SCROLLING" = "true" ]; then
+    write_content 'html {scroll-behavior: smooth;}'
+    write_content ''
+fi
+
+if [ "$SET_BORDER_BOX" = "true" ] || [ "$RESET_PADDING" = "true" ] || [ "$RESET_MARGIN" = "true" ]; then
+    write_content '*,'
+    write_content '*::before,'
+    write_content '*::after {'
+    [ "$SET_BORDER_BOX" = "true" ] && write_content '    box-sizing: border-box;'
+    [ "$RESET_PADDING" = "true" ] && write_content '    padding: 0;'
+    [ "$RESET_MARGIN" = "true" ] && write_content '    margin: 0;'
+    write_content '}'
+    write_content ''
+fi
+
+if [ "$TEMPLATE_SELECTION" = "true" ]; then
+    write_content '::selection {--variable: 42;}'
+    write_content ''
+fi
+
+if [ "$TEMPLATE_FOCUS" = "true" ]; then
+    write_content ':focus {--variable: 42;}'
+    write_content ''
+fi
+
+[ "$TEMPLATE_MEDIA_QUERY" = "true" ] && cat << END | write_content
+@media all and (width >= 0) {
+    :root {--variable: 42;}
+}
+
+END
+
+while [ "$#" -gt 0 ]; do
+
+    if [ -z "$1" ]; then
+        error "Empty file name." 4
+    elif [ -e "$1" ]; then
+        error "\"${1}\" already exists." 5
+    fi
+
+    file="$1"
+    dir="$(dirname "$1")"
+
+    if [ ! -d "$dir" ]; then
+        error "Directory \"${dir}\" not found." 6
+    elif [ ! -w "$dir" ]; then
+        error "Missing write permission for \"${dir}\"." 7
+    elif [ ! -x "$dir" ]; then
+        error "Missing execute permission for \"${dir}\"." 8
+    fi
+
+    cp "$tmp" "$file"
+
+    shift
+done
+
+exit 0

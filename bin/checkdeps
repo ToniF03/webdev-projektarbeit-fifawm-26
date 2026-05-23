@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+set -eu
+
+# Created on: 2026-05-21
+# Author: Finn Konrad
+# License: MIT
+# Description: A Bash script that checks for the presence of a list of dependencies.
+
+error (){
+    printf "%s\n" "ERROR ${2:-1}" >&2
+    printf "%s\n" "$1" >&2
+    exit "${2:-1}"
+}
+
+warning (){
+    printf "%s\n" "WARNING" >&2
+    printf "%s\n" "$1" >&2
+}
+
+var_check (){
+    if [ ! -v "$1" ] || [ -z "${!1}" ]; then
+        error "Variable \"$1\" is not set." 2
+    fi
+}
+
+failed="false"
+check_dependency (){
+    if ! command -v "$1" >/dev/null 2>&1; then
+        warning "Command \"${1}\" not found."
+        failed="true"
+    fi
+}
+
+conf_dir="$(dirname "$0")/config"
+conf_file="${conf_dir}/checkdeps.conf"
+
+if [ ! -f "$conf_file" ]; then
+    error "Config \"${conf_file}\" not found." 1
+fi
+
+# shellcheck source=/dev/null
+source "$conf_file"
+
+var_arr=("DEPENDENCIES")
+
+for var in "${var_arr[@]}"; do
+    var_check "$var"
+done
+
+for dependency in "${DEPENDENCIES[@]}"; do
+    if [ -z "$dependency" ]; then
+        error "Empty dependency entry in dependencies list." 3
+    fi
+    check_dependency "$dependency"
+done
+
+if [ "$failed" = "true" ]; then
+    exit 1
+fi
+
+exit 0

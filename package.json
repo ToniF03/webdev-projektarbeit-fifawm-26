@@ -1,0 +1,29 @@
+{
+  "name": "vanilla-webdev-template",
+  "version": "1.0.0",
+  "description": "A template environment for vanilla web development.",
+  "homepage": "https://github.com/Fithoko/vanilla-webdev-template#readme",
+  "bugs": {
+    "url": "https://github.com/Fithoko/vanilla-webdev-template/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fithoko/vanilla-webdev-template.git"
+  },
+  "license": "MIT",
+  "author": "Finn Konrad",
+  "type": "module",
+  "main": "placeholder",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.4.0",
+    "globals": "17.6.0",
+    "stylelint": "17.12.0",
+    "stylelint-config-standard": "40.0.0",
+    "vitest": "4.1.7",
+    "vnu-jar": "26.5.22"
+  }
+}
