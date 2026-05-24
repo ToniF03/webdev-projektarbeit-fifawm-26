@@ -38,7 +38,7 @@ Run `make test-js` to execute your unit tests inside `src/js/test`.
 
 Run `make start-server` to host your website locally via python.
 
-- You can change the port that is used by changing the `SERVER_PORT` variable inside `Makefile`
+- You can change the port that is used by changing the `SERVER_PORT` variable inside `Makefile`.
 
 Run `make open-site` to open your website with your default browser.
 
@@ -100,6 +100,6 @@ _(excerpt from `make help`)_
 
 ## Changing the Project Structure
 
-If you want to rename any folder you need to update the paths inside `bin/config`, `config`, `Makefile` and `.gitignore`.
+If you want to rename a directory, you need to update the paths inside `bin/config`, `config`, `Makefile` and `.gitignore`.
 
-I advise against changing the project structure as it is hardcoded inside `Makefile`. You would have to rewrite the targets.
+I advise against changing the project structure as it is hardcoded in `Makefile`. You would have to rewrite the targets.
