@@ -100,6 +100,6 @@ _(excerpt from `make help`)_
 
 ## Changing the Project Structure
 
-If you want to rename any folder you need to update the paths inside `bin/config`, `config` and `Makefile`.
+If you want to rename any folder you need to update the paths inside `bin/config`, `config`, `Makefile` and `.gitignore`.
 
 I advise against changing the project structure as it is hardcoded inside `Makefile`. You would have to rewrite the targets.
