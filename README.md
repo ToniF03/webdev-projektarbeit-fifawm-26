@@ -60,6 +60,10 @@ Run `make build-site` to execute my `bundler` script that takes your production 
 
 Run `make clean` to remove the `build` folder and its content.
 
+## CI/CD
+
+`.gitlab-ci.yml` lints, tests and builds your code with every push to the GitLab repository.
+
 ## Full Target List
 
 ```
