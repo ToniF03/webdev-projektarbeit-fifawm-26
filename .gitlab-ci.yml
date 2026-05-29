@@ -5,10 +5,10 @@
 # Description: A YAML file that lints, tests and builds each push to the GitLab repository.
 
 stages:
-  setup
-  lint
-  test
-  build
+  - setup
+  - lint
+  - test
+  - build
 
 install-packages:
   stage: setup
