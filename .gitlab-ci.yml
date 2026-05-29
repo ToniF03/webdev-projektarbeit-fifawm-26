@@ -69,6 +69,7 @@ build-site:
   stage: build
   script:
     - apt-get update
+    - apt-get install -y make
     - apt-get install -y exiftool
     - apt-get install -y zip
     - make build-site
