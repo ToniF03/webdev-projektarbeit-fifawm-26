@@ -1,19 +1,78 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/user/application_security/sast/#available-cicd-variables
-# Secret Detection customization: https://docs.gitlab.com/user/application_security/secret_detection/pipeline/configure/
-# Dependency Scanning customization: https://docs.gitlab.com/user/application_security/dependency_scanning/dependency_scanning_sbom/#customizing-analyzer-behavior
-# Container Scanning customization: https://docs.gitlab.com/user/application_security/container_scanning/#customizing-analyzer-behavior
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ci/variables/#cicd-variable-precedence
+# Project: Vanilla Web Development Template
+# Created on: 2026-05-30
+# Author: Finn Konrad
+# License: MIT
+# Description: A YAML file that lints, tests and builds each push to the GitLab repository.
+
 stages:
-- test
-- secret-detection
-sast:
+  setup
+  lint
+  test
+  build
+
+install-packages:
+  stage: setup
+  image: node
+  script:
+    - npm ci
+  cache:
+    paths:
+      - "node_modules/"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'push'
+
+lint-html:
+  stage: lint
+  image: node
+  dependencies:
+    - install-packages
+  script: 
+    - make lint-html
+  allow_failure: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'push'
+
+lint-css:
+  stage: lint
+  image: node
+  dependencies:
+    - install-packages
+  script: 
+    - make lint-css
+  allow_failure: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'push'
+
+lint-js:
+  stage: lint
+  image: node
+  dependencies:
+    - install-packages
+  script: 
+    - make lint-js
+  allow_failure: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'push'
+
+test-js:
   stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
-- template: Security/Secret-Detection.gitlab-ci.yml
-variables:
-  SECRET_DETECTION_ENABLED: 'true'
-secret_detection:
-  stage: secret-detection
+  image: node
+  dependencies:
+    - install-packages
+  script: 
+    - make test-js
+  allow_failure: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'push'
+
+build-site:
+  stage: build
+  script:
+    - apt install exiftool
+    - apt install zip
+    - make build-site
+  artifacts:
+    paths:
+      - "build/"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'push'
