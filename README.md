@@ -20,9 +20,13 @@ Run `make help` to see a list of all available targets and their explanations.
 
 ## Template Generation
 
-Run `make **/*.{html,css,js}` to create a corresponding template file utilizing my `mkhtml`, `mkcss` and `mkjs` scripts.
+Run `make **/*.{html,css,js,sh}` to create a corresponding template file utilizing my `mkhtml`, `mkcss`, `mkjs` and `mksh` scripts.
 
 - The configuration files lie inside `bin/config`. They allow you to fine tune the template generation to your specific needs.
+
+- `mksh` generates template Shell scripts with my `bin/lib/minion.lib.sh` Shell library already included. Meaning you can start scripting with lots of my utility functions already included. 
+
+    - You may need to correct the path in `MINION_PATH` inside your template Shell script.
 
 ## Linting
 
@@ -38,7 +42,7 @@ Run `make test-js` to execute your unit tests inside `src/js/test`.
 
 Run `make start-server` to host your website locally via python.
 
-- You can change the port that is used by changing the `SERVER_PORT` variable inside `Makefile`.
+- You can change the port that is used by changing the `SERVER_PORT` variable in `Makefile`.
 
 Run `make open-site` to open your website with your default browser.
 
@@ -71,6 +75,7 @@ make help         | Listing all targets
 make **/*.html    | Creating a HTML template file with the given name
 make **/*.css     | Creating a CSS template file with the given name
 make **/*.js      | Creating a JS template file with the given name
+make **/*.sh      | Creating a SHELL template file with the given name
 
 ------------- Code Linting -------------
 
@@ -102,4 +107,4 @@ _(excerpt from `make help`)_
 
 If you want to rename a directory, you need to update the paths inside `bin/config`, `config`, `Makefile` and `.gitignore`.
 
-I advise against changing the project structure as it is hardcoded in `Makefile`. You would have to rewrite the targets.
+I advise against changing the project layout as it is hardcoded in `Makefile`. You would have to rewrite the rules.
