@@ -6,43 +6,44 @@ set -eu
 # License: MIT
 # Description: A Bash script that creates a JS template file.
 
-error (){
-    printf "%s\n" "ERROR ${2:-1}" >&2
-    printf "%s\n" "$1" >&2
-    exit "${2:-1}"
-}
+SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+MINION_PATH="${SCRIPT_DIR}/lib/minion.lib.sh"
+INCLUDE_LIST=("error" "check_dep" "check_perm" "get_last")
 
-var_check (){
-    if [ ! -v "$1" ] || [ -z "${!1}" ]; then
-        error "Variable \"$1\" is not set." 2
-    fi
-}
-
-conf_dir="$(dirname "$0")/config"
-conf_file="${conf_dir}/mkjs.conf"
-
-if [ ! -f "$conf_file" ]; then
-    error "Config \"${conf_file}\" not found." 1
+if [ ! -e "$MINION_PATH" ] || [ -d "$MINION_PATH" ] || [ ! -r "$MINION_PATH" ]; then
+    printf "%s\n" "FATAL 1" >&2
+    printf "%s\n" "\"$(basename "$MINION_PATH")\" not found." >&2
+    exit 1
 fi
 
 # shellcheck source=/dev/null
-source "$conf_file"
+source "$MINION_PATH"
 
-var_arr=(
-    "DATE" "AUTHOR" "LICENSE" "DESCRIPTION"
-    "TEMPLATE_CLASS" "TEMPLATE_FETCH_API" "TEMPLATE_DISPATCH_EVENT" "TEMPLATE_EVENT_LISTENER" "TEMPLATE_VITEST_TEST"
-)
-
-for var in "${var_arr[@]}"; do
-    var_check "$var"
-done
-
-if [ $# -lt 1 ]; then
-    error "Usage: mkjs [FILENAME(S)]" 3
+if [ "$(type -t "check_func")" != "function" ] || ! check_func "${INCLUDE_LIST[@]}"; then
+    printf "%s\n" "FATAL 2" >&2
+    printf "%s\n" "\"$(basename "$MINION_PATH")\" is incomplete." >&2
+    exit 1
 fi
 
-tmp=$(mktemp)
-trap 'rm -f "$tmp"' EXIT
+CONFIG_FILE="${SCRIPT_DIR}/config/mkjs.conf"
+source_file "$CONFIG_FILE" || error "Config \"$(get_last)\" not found." 1
+
+PARAMETERS=("DATE" "AUTHOR" "LICENSE" "DESCRIPTION"
+    "TEMPLATE_CLASS" "TEMPLATE_FETCH_API" "TEMPLATE_DISPATCH_EVENT" "TEMPLATE_EVENT_LISTENER"
+    "TEMPLATE_VITEST_TEST"
+)
+check_var "${PARAMETERS[@]}" || error "Parameter \"$(get_last)\" is not set." 2
+
+[ "$#" -ge 1 ] || error "Usage: ${0} [FILENAME(S)]" 3
+
+check_content "$@" || error "Empty file name in parameters." 4
+check_absent "$@" || error "\"$(get_last)\" already exists." 5
+check_path "$@" || error  "Directory \"$(get_last)\" not found." 6
+check_path_perm "wx" "$@" || error "Missing write/execute permission for \"$(get_last)\"." 7
+
+init_namespace
+trap del_namespace EXIT
+tmp=$(mktmp_file)
 : > "$tmp"
 
 cat << END >> "$tmp"
@@ -132,26 +133,11 @@ dispatchCustomEvent('EVENT_PLACEHOLDER');
 END
 
 while [ "$#" -gt 0 ]; do
-
-    if [ -z "$1" ]; then
-        error "Empty file name." 4
-    elif [ -e "$1" ]; then
-        error "\"${1}\" already exists." 5
+    if check_absent "$1"; then
+        cp "$tmp" "$1"
+    else
+        warning "Skipped duplicate parameter \"$(get_last)\"."
     fi
-
-    file="$1"
-    dir="$(dirname "$1")"
-
-    if [ ! -d "$dir" ]; then
-        error "Directory \"${dir}\" not found." 6
-    elif [ ! -w "$dir" ]; then
-        error "Missing write permission for \"${dir}\"." 7
-    elif [ ! -x "$dir" ]; then
-        error "Missing execute permission for \"${dir}\"." 8
-    fi
-
-    cp "$tmp" "$file"
-
     shift
 done
 

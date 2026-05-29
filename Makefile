@@ -71,6 +71,9 @@ install: | $(SCRIPT_DIR)
 %.js: | $(SCRIPT_DIR)
 	"$(SCRIPT_DIR)/mkjs" "$@"
 
+%.sh: | $(SCRIPT_DIR)
+	"$(SCRIPT_DIR)/mksh" "$@"
+
 lint: | $(HTML_PATH) $(CSS_PATH) $(JS_PATH) $(NPM_CONFIG_DIR)
 	@printf "%s\n\n" "==================== HTML ===================="
 	-npx vnu "$(INDEX_HTML)" "$(HTML_PATH)"
@@ -155,7 +158,8 @@ help:
 	@printf "%s\n\n" "------------ File Creation -------------"
 	@printf "%s\n" "make **/*.html    | Creating a HTML template file with the given name"
 	@printf "%s\n" "make **/*.css     | Creating a CSS template file with the given name"
-	@printf "%s\n\n" "make **/*.js      | Creating a JS template file with the given name"
+	@printf "%s\n" "make **/*.js      | Creating a JS template file with the given name"
+	@printf "%s\n\n" "make **/*.sh      | Creating a SHELL template file with the given name"
 
 	@printf "%s\n\n" "------------- Code Linting -------------"
 	@printf "%s\n" "make lint         | Linting all HTML, CSS and JS files in \"$(SRC_DIR)\""
@@ -175,3 +179,7 @@ help:
 	@printf "%s\n" "make strip-src    | Removing the EXIF data from every file in \"$(SRC_DIR)\""
 	@printf "%s\n" "make build-site   | Building the site without dev dependencies into \"$(BUILD_DIR)\""
 	@printf "%s\n\n" "make clean        | Clearing \"$(BUILD_DIR)\""
+
+%:
+	@printf "%s\n" "INVALID TARGET"
+	@exit 1
