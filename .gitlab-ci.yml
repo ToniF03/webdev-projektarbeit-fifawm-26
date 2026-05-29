@@ -15,7 +15,7 @@ install-packages:
   image: node
   script:
     - npm ci
-  cache:
+  artifacts:
     paths:
       - "node_modules/"
   rules:
@@ -68,8 +68,9 @@ test-js:
 build-site:
   stage: build
   script:
-    - apt install exiftool
-    - apt install zip
+    - apt-get update
+    - apt-get install -y exiftool
+    - apt-get install -y zip
     - make build-site
   artifacts:
     paths:
