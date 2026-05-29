@@ -71,38 +71,43 @@ Run `make clean` to remove the `build` folder and its content.
 
 ------------- Setup & Help -------------
 
-make install      | Checking for dependencies and setting up NPM
-make help         | Listing all targets
+make install        | Checking for dependencies and setting up NPM
+make help           | Listing all targets
 
 ------------ File Creation -------------
 
-make **/*.html    | Creating a HTML template file with the given name
-make **/*.css     | Creating a CSS template file with the given name
-make **/*.js      | Creating a JS template file with the given name
-make **/*.sh      | Creating a SHELL template file with the given name
+make **/*.html      | Creating a HTML template file with the given name
+make **/*.css       | Creating a CSS template file with the given name
+make **/*.js        | Creating a JS template file with the given name
+make **/*.sh        | Creating a SHELL template file with the given name
 
 ------------- Code Linting -------------
 
-make lint         | Linting all HTML, CSS and JS files in "src"
-make lint-html    | Linting all HTML files in "src/html"
-make lint-css     | Linting all CSS files in "src/css"
-make lint-js      | Linting all JS files in "src/js"
+make lint           | Linting all HTML, CSS and JS files in "src"
+make lint-html      | Linting all HTML files in "src/html"
+make lint-css       | Linting all CSS files in "src/css"
+make lint-js        | Linting all JS files in "src/js"
 
 ---------- Javascript Testing ----------
 
-make test-js      | Testing all JS files in "src/js/test"
+make test-js        | Testing all JS files in "src/js/test"
 
 ------------ Server & Site -------------
 
-make start-server | Starting the local server on port "8080"
-make stop-server  | Stopping the local server
-make open-site    | Opening the site hosted on the local server
+make start-server   | Starting the local server on port "8080"
+make stop-server    | Stopping the local server
+make open-site      | Opening the site hosted on the local server
 
 ---------------- Build -----------------
 
-make strip-src    | Removing the EXIF data from every file in "src"
-make build-site   | Building the site without dev dependencies into "build"
-make clean        | Clearing "build"
+make strip-src      | Removing the EXIF data from every file in "src"
+make build-site     | Building the site without dev dependencies into "build"
+
+---------------- Clean -----------------
+
+make clean          | Deleting "build" and "node_modules"
+make clean-build    | Deleting "build"
+make clean-packages | Deleting "node_modules"
 ```
 
 _(excerpt from `make help`)_
