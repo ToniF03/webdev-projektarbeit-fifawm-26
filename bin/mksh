@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+set -eu
+
+# Created on: 2026-04-06
+# Author: Finn Konrad
+# License: MIT
+# Description: A Bash script that creates template Shell scripts.
+
+SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+MINION_PATH="${SCRIPT_DIR}/lib/minion.lib.sh"
+INCLUDE_LIST=("error" "check_dep" "check_empty" "check_exists"
+    "check_perm" "check_dir" "get_last" "init_namespace"
+    "del_namespace" "mktmp_file"
+)
+
+if [ ! -e "$MINION_PATH" ] || [ -d "$MINION_PATH" ] || [ ! -r "$MINION_PATH" ]; then
+    printf "%s\n" "FATAL 1" >&2
+    printf "%s\n" "\"$(basename "$MINION_PATH")\" not found." >&2
+    exit 1
+fi
+
+# shellcheck source=/dev/null
+source "$MINION_PATH"
+
+if [ "$(type -t "check_func")" != "function" ] || ! check_func "${INCLUDE_LIST[@]}"; then
+    printf "%s\n" "FATAL 2" >&2
+    printf "%s\n" "\"$(basename "$MINION_PATH")\" is incomplete." >&2
+    exit 1
+fi
+
+CONFIG_FILE="${SCRIPT_DIR}/config/mksh.conf"
+source_file "$CONFIG_FILE" || error "Config \"$(get_last)\" not found." 1
+
+PARAMETERS=("DATE" "AUTHOR" "LICENSE" "DESCRIPTION")
+check_var "${PARAMETERS[@]}" || error "Parameter \"$(get_last)\" is not set." 2
+
+[ "$#" -ge 1 ] || error "Usage: ${0} [FILENAME(S)]" 3
+
+check_content "$@" || error "Empty file name in parameters." 4
+check_absent "$@" || error "\"$(get_last)\" already exists." 5
+check_path "$@" || error  "Directory \"$(get_last)\" not found." 6
+check_path_perm "wx" "$@" || error "Missing write/execute permission for \"$(get_last)\"." 7
+
+init_namespace
+trap del_namespace EXIT
+tmp=$(mktmp_file)
+chmod u+rwx "$tmp"
+
+cat << EOF > "$tmp"
+#!/usr/bin/env bash
+set -eu
+
+# Created on: ${DATE}
+# Author(s): ${AUTHOR}
+# License: ${LICENSE}
+# Description: ${DESCRIPTION}
+
+SCRIPT_DIR="\$(dirname "\$(realpath "\${BASH_SOURCE[0]}")")"
+MINION_PATH="\${SCRIPT_DIR}/lib/minion.lib.sh"
+INCLUDE_LIST=("error")
+
+if [ ! -e "\$MINION_PATH" ] || [ -d "\$MINION_PATH" ] || [ ! -r "\$MINION_PATH" ]; then
+    printf "%s\n" "FATAL 1" >&2
+    printf "%s\n" "\\"\$(basename "\$MINION_PATH")\\" not found." >&2
+    exit 1
+fi
+
+# shellcheck source=/dev/null
+source "\$MINION_PATH"
+
+if [ "\$(type -t "check_func")" != "function" ] || ! check_func "\${INCLUDE_LIST[@]}"; then
+    printf "%s\n" "FATAL 2" >&2
+    printf "%s\n" "\\"\$(basename "\$MINION_PATH")\\" is incomplete." >&2
+    exit 1
+fi
+
+exit 0
+EOF
+
+while [ "$#" -gt 0 ]; do
+    if check_absent "$1"; then
+        cp "$tmp" "$1"
+    else
+        warning "Skipped duplicate parameter \"$(get_last)\"."
+    fi
+    shift
+done
+
+exit 0

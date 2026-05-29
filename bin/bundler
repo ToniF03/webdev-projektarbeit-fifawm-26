@@ -6,148 +6,105 @@ set -eu
 # License: MIT
 # Description: A Bash script that creates an archive in a target folder from any number of source files.
 
-error (){
-    printf "%s\n" "ERROR ${2:-1}" >&2
-    printf "%s\n" "$1" >&2
-    exit "${2:-1}"
-}
+SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+MINION_PATH="${SCRIPT_DIR}/lib/minion.lib.sh"
+INCLUDE_LIST=("error" "warning" "check_dep" "check_var"
+    "check_file" "check_dir" "check_perm" "check_empty"
+    "check_content" "check_absent" "check_exists" "get_last"
+    "init_namespace" "del_namespace" "mktmp_dir" "mktmp_name"
+    "source_file"
+)
 
-var_check (){
-    if [ ! -v "$1" ] || [ -z "${!1}" ]; then
-        error "Variable \"$1\" is not set." 3
-    fi
-}
-
-check_dependency (){
-    if ! command -v "$1" >/dev/null 2>&1; then
-        error "Command \"${1}\" not found." 1
-    fi
-}
-
-dir_check (){
-    if [ ! -e "$1" ]; then
-        error "Directory \"${1}\" not found." 4
-    elif [ ! -d "$1" ]; then
-        error "\"${1}\" is not a directory." 5
-    elif [ ! -w "$1" ]; then
-        error "Missing write permission for \"${1}\"." 6
-    fi
-}
-
-tmp_names=()
-# shellcheck disable=SC2317
-clear_tmp_files (){
-    local tmp_name
-    for tmp_name in "${tmp_names[@]}"; do
-        rm -rf "$tmp_name"
-    done
-}
-trap 'clear_tmp_files' EXIT
-
-dependencies=("tar" "zip")
-
-for dependency in "${dependencies[@]}"; do
-    check_dependency "$dependency"
-done
-
-conf_dir="$(dirname "$0")/config"
-conf_file="${conf_dir}/bundler.conf"
-
-if [ ! -f "$conf_file" ]; then
-    error "Config \"${conf_file}\" not found." 2
+if [ ! -e "$MINION_PATH" ] || [ -d "$MINION_PATH" ] || [ ! -r "$MINION_PATH" ]; then
+    printf "%s\n" "FATAL 1" >&2
+    printf "%s\n" "\"$(basename "$MINION_PATH")\" not found." >&2
+    exit 1
 fi
 
 # shellcheck source=/dev/null
-source "$conf_file"
+source "$MINION_PATH"
 
-var_arr=("ROOT_DIR" "SRC_FILES" "BUNDLE_NAME" "GEN_DIR" "GEN_TGZ" "GEN_ZIP")
-
-for var in "${var_arr[@]}"; do
-    var_check "$var"
-done
-
-if [ $# -ne 1 ]; then
-    error "Usage: bundler [TARGET_DIRECTORY]" 14
+if [ "$(type -t "check_func")" != "function" ] || ! check_func "${INCLUDE_LIST[@]}"; then
+    printf "%s\n" "FATAL 2" >&2
+    printf "%s\n" "\"$(basename "$MINION_PATH")\" is incomplete." >&2
+    exit 1
 fi
 
-dir_check "$1"
-TARGET_DIR="$(realpath "$1")"
+DEPENDENCIES=("tar" "zip")
+check_dep "${DEPENDENCIES[@]}" || error "Command \"$(get_last)\" not found." 1
 
-SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+[ "$#" -ge 1 ] || error "Usage: ${0} [TARGET_DIRECTORY(S)]" 2
+
+check_content "$@" || error "Empty directory name in parameters." 3
+check_dir "$@" || error "Directory $(get_last) not found." 4
+check_perm "wx" "$@" || error "Missing write/execute permission for directory \"$(get_last)\"." 5
+TARGET_DIRS=()
+for DIR in "$@"; do
+    TARGET_DIRS+=("$(realpath "$DIR")")
+done
+
 cd "$SCRIPT_DIR"
 
-dir_check "$ROOT_DIR"
-ROOT_DIR="$(dirname "$ROOT_DIR")"
+CONFIG_FILE="${SCRIPT_DIR}/config/bundler.conf"
+source_file "$CONFIG_FILE" || error "Config \"$(get_last)\" not found." 6
+
+PARAMETERS=("ROOT_DIR" "SRC_FILES" "BUNDLE_NAME" "GEN_DIR"
+    "GEN_TGZ" "GEN_ZIP"
+)
+check_var "${PARAMETERS[@]}" || error "Parameter \"$(get_last)\" is not set." 7
+
+check_dir "$ROOT_DIR" || error "Directory $(get_last) not found." 8
+check_perm "wx" "$ROOT_DIR" || error "Missing write/execute permission for directory \"$(get_last)\"." 9
 cd "$ROOT_DIR"
 
 for file in "${SRC_FILES[@]}"; do
 
-    if [ -z "$file" ]; then
-        error "Empty file name in source files list." 7
-    elif [ ! -e "$file" ]; then
-        error "File \"${file}\" not found." 8
-    elif [ ! -d "$file" ]; then
+    check_empty "$file" && error "Empty file name in source files list." 10
+    check_exists "$file" || error "File \"$(get_last)\" not found." 11
 
-        if [ ! -r "$file" ]; then
-            error "Missing read permission for file \"${file}\"." 9
+    if check_file "$file"; then
+        check_perm "r" "$file" || error "Missing read permission for file \"$(get_last)\"." 12
+    elif check_dir "$file"; then
+        check_perm "rx" "$file" || error "Missing read/execute permission for directory \"$(get_last)\"." 13
+
+        if [ -n "$(find "$file" \( -type f ! -readable -o -type d \( ! -readable -o ! -executable \) \) -print -quit)" ]; then
+            error "Missing read/execute permission for files/directories inside directory \"$(get_last)\"." 14
         fi
-
-    elif [ -d "$file" ]; then
-
-        if [ ! -r "$file" ]; then
-            error "Missing read permission for directory \"${file}\"." 10
-        elif [ ! -x "$file" ]; then
-            error "Missing execute permission for directory \"${file}\"." 11
-        elif [ -n "$(find "$file" \( -type f ! -readable -o -type d \( ! -readable -o ! -executable \) \) -print -quit)" ]; then
-            error "Missing read/execute permission for files/directories inside directory \"${file}\"." 12
-        fi
-
     else
-        error "\"${file}\" has an unknown file type." 13
+        error "\"$(get_last)\" has an unknown file type." 15
     fi
-
 done
 
-tmp_dir=$(mktemp -d)
-tmp_names+=("$tmp_dir")
+for TARGET_DIR in "${TARGET_DIRS[@]}"; do
+    dir_path="${TARGET_DIR}/${BUNDLE_NAME}"
+    tgz_path="${TARGET_DIR}/${BUNDLE_NAME}.tar.gz"
+    zip_path="${TARGET_DIR}/${BUNDLE_NAME}.zip"
 
-tmp_tgz=$(mktemp)
-tmp_names+=("$tmp_tgz")
+    check_absent "$dir_path" "$tgz_path" "$zip_path" || error "\"$(get_last)\" already exists." 16
+done
 
-tmp_zip=$(mktemp)
-tmp_names+=("$tmp_zip")
+init_namespace
+trap del_namespace EXIT
+tmp_dir=$(mktmp_dir)
+tmp_tgz=$(mktmp_name)
+tmp_zip=$(mktmp_name)
 
-rm -f "$tmp_tgz" "$tmp_zip"
+cp -r --parent "${SRC_FILES[@]}" "$tmp_dir"
+tar -czf "$tmp_tgz" "${SRC_FILES[@]}"
+zip -r "$tmp_zip" "${SRC_FILES[@]}" >/dev/null
 
-dir_path="${TARGET_DIR}/${BUNDLE_NAME}"
-tgz_path="${TARGET_DIR}/${BUNDLE_NAME}.tar.gz"
-zip_path="${TARGET_DIR}/${BUNDLE_NAME}.zip"
+for TARGET_DIR in "${TARGET_DIRS[@]}"; do
+    dir_path="${TARGET_DIR}/${BUNDLE_NAME}"
+    tgz_path="${TARGET_DIR}/${BUNDLE_NAME}.tar.gz"
+    zip_path="${TARGET_DIR}/${BUNDLE_NAME}.zip"
 
-if [ "$GEN_DIR" = "true" ]; then
-    if [ -e "$dir_path" ]; then
-        error "\"${dir_path}\" already exists." 15
+    if check_absent "$dir_path" "$tgz_path" "$zip_path"; then
+        [ "$GEN_DIR" = "true" ] && cp -r "$tmp_dir" "$dir_path"
+        [ "$GEN_TGZ" = "true" ] && cp "$tmp_tgz" "$tgz_path"
+        [ "$GEN_ZIP" = "true" ] && cp "$tmp_zip" "$zip_path"
+    else
+        warning "Skipped duplicate parameter \"$(get_last)\"."
     fi
-
-    cp -r --parent "${SRC_FILES[@]}" "$tmp_dir"
-    mv "$tmp_dir" "$dir_path"
-fi
-
-if [ "$GEN_TGZ" = "true" ]; then
-    if [ -e "$tgz_path" ]; then
-        error "\"${tgz_path}\" already exists." 15
-    fi
-
-    tar -czf "$tmp_tgz" "${SRC_FILES[@]}"
-    mv "$tmp_tgz" "$tgz_path"
-fi
-
-if [ "$GEN_ZIP" = "true" ]; then
-    if [ -e "$zip_path" ]; then
-        error "\"${zip_path}\" already exists." 15
-    fi
-
-    zip -r "$tmp_zip" "${SRC_FILES[@]}" >/dev/null
-    mv "$tmp_zip" "$zip_path"
-fi
+done
 
 exit 0
