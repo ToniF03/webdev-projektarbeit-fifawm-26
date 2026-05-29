@@ -67,9 +67,9 @@ test-js:
 
 build-site:
   stage: build
+  image: node
   script:
     - apt-get update
-    - apt-get install -y make
     - apt-get install -y exiftool
     - apt-get install -y zip
     - make build-site
