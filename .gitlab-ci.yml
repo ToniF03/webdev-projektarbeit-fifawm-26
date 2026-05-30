@@ -15,7 +15,7 @@ install-packages:
   image: node
   script:
     - npm ci
-  artifacts:
+  cache:
     paths:
       - "node_modules/"
   rules:
@@ -29,6 +29,9 @@ lint-html:
   script: 
     - make lint-html
   allow_failure: true
+  cache:
+    paths:
+      - "node_modules/"
   rules:
     - if: $CI_PIPELINE_SOURCE == 'push'
 
@@ -40,6 +43,9 @@ lint-css:
   script: 
     - make lint-css
   allow_failure: true
+  cache:
+    paths:
+      - "node_modules/"
   rules:
     - if: $CI_PIPELINE_SOURCE == 'push'
 
@@ -51,6 +57,9 @@ lint-js:
   script: 
     - make lint-js
   allow_failure: true
+  cache:
+    paths:
+      - "node_modules/"
   rules:
     - if: $CI_PIPELINE_SOURCE == 'push'
 
@@ -62,6 +71,9 @@ test-js:
   script: 
     - make test-js
   allow_failure: true
+  cache:
+    paths:
+      - "node_modules/"
   rules:
     - if: $CI_PIPELINE_SOURCE == 'push'
 
