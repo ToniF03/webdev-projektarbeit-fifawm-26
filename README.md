@@ -114,6 +114,6 @@ _(excerpt from `make help`)_
 
 ## Changing the Project Structure
 
-If you want to rename a directory, you need to update the paths inside `bin/config`, `config`, `Makefile` and `.gitignore`.
+If you want to rename a directory, you need to update the paths inside `bin/config`, `config`, `Makefile`, `.gitignore` and `.gitlab-ci.yml`.
 
 I advise against changing the project layout as it is hardcoded in `Makefile`. You would have to rewrite the rules.
