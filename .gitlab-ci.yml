@@ -59,4 +59,5 @@ build-site:
     - make build-site
   artifacts:
     paths:
-      - "build/"
+      - "build/*"
+    expire_in: 15 minutes
