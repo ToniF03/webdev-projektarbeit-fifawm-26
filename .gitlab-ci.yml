@@ -4,6 +4,16 @@
 # License: MIT
 # Description: A YAML file that lints, tests and builds each push to the GitLab repository.
 
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'push'
+
+default:
+  image: node:latest
+  cache:
+    paths:
+      - "node_modules/"
+
 stages:
   - setup
   - lint
@@ -12,74 +22,36 @@ stages:
 
 install-packages:
   stage: setup
-  image: node
   script:
     - npm ci
-  cache:
-    paths:
-      - "node_modules/"
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'push'
 
 lint-html:
   stage: lint
-  image: node
-  dependencies:
-    - install-packages
+  needs: ["install-packages"]
   script: 
     - make lint-html
-  allow_failure: true
-  cache:
-    paths:
-      - "node_modules/"
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'push'
 
 lint-css:
   stage: lint
-  image: node
-  dependencies:
-    - install-packages
+  needs: ["install-packages"]
   script: 
     - make lint-css
-  allow_failure: true
-  cache:
-    paths:
-      - "node_modules/"
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'push'
 
 lint-js:
   stage: lint
-  image: node
-  dependencies:
-    - install-packages
+  needs: ["install-packages"]
   script: 
     - make lint-js
-  allow_failure: true
-  cache:
-    paths:
-      - "node_modules/"
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'push'
 
 test-js:
   stage: test
-  image: node
-  dependencies:
-    - install-packages
+  needs: ["install-packages"]
   script: 
     - make test-js
-  allow_failure: true
-  cache:
-    paths:
-      - "node_modules/"
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'push'
 
 build-site:
   stage: build
-  image: node
+  needs: []
   script:
     - apt-get update
     - apt-get install -y exiftool
@@ -88,5 +60,3 @@ build-site:
   artifacts:
     paths:
       - "build/"
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'push'
