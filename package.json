@@ -1,17 +1,17 @@
 {
-  "name": "vanilla-webdev-template",
+  "name": "webdev-projektarbeit-fifawm26",
   "version": "1.0.0",
-  "description": "A template environment for vanilla web development.",
-  "homepage": "https://gitlab.ai.it.hs-worms.de/inf4499/vanilla-webdev-template#readme",
+  "description": "Eine thematische Webseite zur FIFA WM 26",
+  "homepage": "https://gitlab.ai.it.hs-worms.de/inf4499/webdev-projektarbeit-fifawm-26#readme",
   "bugs": {
-    "url": "https://gitlab.ai.it.hs-worms.de/inf4499/vanilla-webdev-template/issues"
+    "url": "https://gitlab.ai.it.hs-worms.de/inf4499/webdev-projektarbeit-fifawm-26/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.ai.it.hs-worms.de/inf4499/vanilla-webdev-template.git"
+    "url": "git+https://gitlab.ai.it.hs-worms.de/inf4499/webdev-projektarbeit-fifawm-26.git"
   },
   "license": "MIT",
-  "author": "Finn Konrad",
+  "author": "Toni Fey, Finn Konrad, Tim Zingler",
   "type": "module",
   "main": "placeholder",
   "scripts": {
