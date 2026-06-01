@@ -10,7 +10,9 @@ The template requires the following tools to work:
 
 ## Setup
 
-Run `make install` to execute my `checkdeps` script and `npm ci`.
+Run `bin/checkdeps` to execute my `checkdeps` script independently, ensuring all dependencies are installed before setting up `npm` with `make install`.
+
+Run `make install` to execute my `checkdeps` script again and `npm ci`.
 
 - The `.npmrc` is configured with `ignore-scripts`, `audit` and `save-exact` set to `true` to ensure a secure and transparent installation process.
 
