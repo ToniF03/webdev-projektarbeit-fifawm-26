@@ -6,7 +6,7 @@
 
 workflow:
   rules:
-    - if: $CI_PIPELINE_SOURCE == 'push'
+    - when: always
 
 default:
   image: node:latest
