@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <!-- Browser Window -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="stylesheet.css">
-    <script type="module" src="script.js"></script>
+    <link rel="stylesheet" href="src/css/stylesheet.css">
 
     <!-- SEO -->
     <title>Title</title>
@@ -24,7 +24,58 @@
     <!-- Multimedia -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
-<body>
 
+<body>
+    <nav class="topbar">
+        <ul>
+            <li><a class="tab" href="#">Home</a></li>
+            <li><a class="tab" href="#">Spielplan</a></li>
+            <li><a class="tab" href="#">News</a></li>
+            <li><a class="tab" href="#">Liveticker</a></li>
+        </ul>
+    </nav>
+
+    <section class="slider">
+        <figure>
+            <img src="src/assets/banner.png" alt="WM 2026 Slider Picture">
+        </figure>
+    </section>
+
+    <script>
+        const banner = document.querySelector('.slider img');
+        if (banner) {
+            const url = new URL(banner.getAttribute('src'), window.location.href);
+            url.searchParams.set('v', String(Date.now()));
+            banner.src = url.toString();
+        }
+    </script>
+
+    <section class="content">
+        <h3>Aktuelle Spiele</h3>
+        <article class="card">
+            <section class="grid3c">
+                <h4>GERMANY<br>7</h4>
+                <h4>-</h4>
+                <h4>CURACAO<br>1</h4>
+            </section>
+            <br>
+            <section class="grid2c">
+                <a>Felix Nmecha 7'<br>N. Schlotterbeck 38'<br>K. Havertz 45'+5'<br>J. Musiala 47'<br>N. Brown 68'<br>D. Undav 78'<br>K. Havertz 88'</a>
+                <a class="tr">L.Comencia 21'</a>
+            </section>
+        </article>
+
+    </section>
+
+    <a class="content">T-bone ham hock salami brisket ball tip, ham pig frankfurter. Bacon mortadella chuck sausage
+        flank. T-bone venison hamburger, kielbasa chuck capicola boudin strip steak landjaeger meatball jowl shank.
+        Pastrami pork chop short loin shoulder jowl ham hock. Filet mignon cupim pastrami drumstick. Swine pork loin
+        brisket turkey. Strip steak t-bone pancetta, cow frankfurter swine hamburger jowl turducken tail polony doner
+        sirloin.</a>
+
+    <a class="content">Ground round bresaola venison salami. Sausage rump chuck boudin andouille. Short loin rump
+        andouille salami buffalo cow. Mortadella fatback doner flank, pork belly short ribs sirloin buffalo turducken
+        capicola sausage kielbasa.</a>
 </body>
+
 </html>
