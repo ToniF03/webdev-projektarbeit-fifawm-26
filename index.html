@@ -22,12 +22,13 @@
     <meta property="og:image" content="image.jpg">
 
     <!-- Multimedia -->
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/svg" href="src/assets/favicon.png">
 </head>
 
 <body>
     <nav class="topbar">
-        <ul>
+        <ul class="topbar-menu">
+            <a class="topbar-title"><img class="topbar-icon" src="src/assets/favicon.png" alt="WM2026 Icon">WM2026</a>
             <li><a class="tab" href="#">Home</a></li>
             <li><a class="tab" href="#">Spielplan</a></li>
             <li><a class="tab" href="#">News</a></li>
@@ -38,6 +39,14 @@
     <section class="slider">
         <figure>
             <img src="src/assets/banner.png" alt="WM 2026 Slider Picture">
+            <section class="slider-overlay">
+                <a class="slider-title">FIFA<br>WORLD CUP<br>2026</a>
+                <a>48 NATIONEN. 3 GASTGEBERLÄNDER. EIN TRAUM.</a>
+                <section class="slider-actions">
+                    <button class="slider-btn">SPIELPLAN ANSEHEN &gt;</button>
+                    <button class="slider-btn slider-btn-secondary">TEAMS ENTDECKEN</button>
+                </section>
+            </section>
         </figure>
     </section>
 
@@ -51,6 +60,39 @@
     </script>
 
     <section class="content">
+        <article class="card">
+            <h4>DIE GASTGEBERLÄNDER</h4>
+            <section class="host-list">
+                <section class="card no-shadow host-card">
+                    <img class="host-flag" src="https://flagcdn.com/w80/us.png" alt="Flagge USA">
+                    <section class="host-copy">
+                        <h5>USA</h5>
+                        <p>Modernste Stadien und Rekordzuschauerzahlen.</p>
+                    </section>
+                </section>
+
+                <section class="card no-shadow host-card">
+                    <img class="host-flag" src="https://flagcdn.com/w80/mx.png" alt="Flagge Mexiko">
+                    <section class="host-copy">
+                        <h5>MEXIKO</h5>
+                        <p>Erstes Land mit drei ausgetragenen Weltmeisterschaften.</p>
+                    </section>
+                </section>
+
+                <section class="card no-shadow host-card">
+                    <img class="host-flag" src="https://flagcdn.com/w80/ca.png" alt="Flagge Kanada">
+                    <section class="host-copy">
+                        <h5>KANADA</h5>
+                        <p>Neue Fußballbegeisterung und moderne Arenen.</p>
+                    </section>
+                </section>
+
+                <a href="#">MEHR ERFAHREN &#8594;</a>
+            </section>
+        </article>
+    </section>
+
+    <section class="content">
         <h3>Aktuelle Spiele</h3>
         <article class="card">
             <section class="grid3c">
@@ -60,7 +102,8 @@
             </section>
             <br>
             <section class="grid2c">
-                <a>Felix Nmecha 7'<br>N. Schlotterbeck 38'<br>K. Havertz 45'+5'<br>J. Musiala 47'<br>N. Brown 68'<br>D. Undav 78'<br>K. Havertz 88'</a>
+                <a>Felix Nmecha 7'<br>N. Schlotterbeck 38'<br>K. Havertz 45'+5'<br>J. Musiala 47'<br>N. Brown 68'<br>D.
+                    Undav 78'<br>K. Havertz 88'</a>
                 <a class="tr">L.Comencia 21'</a>
             </section>
         </article>
