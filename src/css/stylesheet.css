@@ -4,7 +4,8 @@
 * Created on: 2026-06-14
 * Author(s): Toni Fey, Finn Konrad, Tim Zingler
 * License: MIT
-* Description:
+* Descri
+* Res
 * Main stylesheet for the FIFA World Cup 2026 website.
 * Provides a responsive layout using CSS Grid and Flexbox,
 * including the navigation bar, image slider, global reset rules,
@@ -12,7 +13,14 @@
 */
 
 :root {
-    --variable: 42;
+    /* Basis-Größe */
+    --layout-scale-base: 4rem;
+    /* Schrittgröße für Breakpoints */
+    --layout-scale-step-size: 0.5rem;
+    /* Minimum-Größe */
+    --layout-scale-limit: 0.5rem;
+    /* Primäre Skala */
+    --layout-scale: var(--layout-scale-base);
 }
 
 html {
@@ -106,6 +114,13 @@ h4 {
     grid-template-columns: 1fr 1fr;
 }
 
+.grid2c2r {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    gap: 0.5rem;
+}
+
 .tr {
     text-align: right;
 }
@@ -161,7 +176,7 @@ nav .tab {
     border-radius: 30rem;
     border: 1px solid rgb(255 255 255 / 35%);
     background: rgb(255 255 255 / 12%);
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(0.5rem);
     font-weight: 500;
     transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease,
         border-color 0.2s ease, box-shadow 0.2s ease;
@@ -177,6 +192,8 @@ nav .tab:focus-visible {
     outline: none;
 }
 
+/* Banner image */
+
 .slider {
     grid-column: 1 / -1;
 }
@@ -188,7 +205,7 @@ nav .tab:focus-visible {
 
 .slider img {
     object-fit: cover;
-    height: 250px;
+    height: 18.75rem;
     width: 100%;
 }
 
@@ -223,7 +240,7 @@ nav .tab:focus-visible {
 
 .slider-btn {
     border: 1px solid rgb(255 255 255 / 45%);
-    border-radius: 999px;
+    border-radius: 30rem;
     background: rgb(255 255 255 / 18%);
     color: #fff;
     padding: 0.6rem 1.2rem;
@@ -260,9 +277,9 @@ nav .tab:focus-visible {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
     border-color: rgba(0, 0, 0, 0.075);
     border-style: inset;
-    border-width: 1px;
-    border-radius: 10px;
-    padding: 10px;
+    border-width: thin;
+    border-radius: 0.625rem;
+    padding: 0.625rem;
     margin-bottom: 0.5em;
 }
 
@@ -289,42 +306,58 @@ nav .tab:focus-visible {
 
 .host-card {
     display: flex;
+    position: relative;
     align-items: center;
     gap: 0.9rem;
     padding: 0.85rem 1rem;
     border: 1px solid rgb(16 38 8 / 12%);
     border-radius: 14px;
-    background: linear-gradient(135deg, rgb(70 109 29 / 8%), rgb(255 255 255 / 95%));
+    background: #F7F7F7;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    
+    overflow: hidden;
+    min-height: 8rem;
 }
 
-.host-card:hover {
+.host-card>.banner {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+}
+
+.interactive-card:hover {
     transform: translateY(-1px);
     box-shadow: 0 10px 20px rgb(0 0 0 / 10%);
     border-color: rgb(70 109 29 / 30%);
 }
 
+.host-card-content {
+    background: linear-gradient(90deg, #F7F7F7 50%, transparent 100%);
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+}
+
 .host-flag {
-    width: 64px;
-    height: 44px;
-    border-radius: 10px;
+    /* 16:11 */
+    width: 3rem;
+    height: 2.0625rem;
+    border-radius: 0.625rem;
     object-fit: cover;
     flex-shrink: 0;
     box-shadow: 0 4px 10px rgb(0 0 0 / 20%);
 }
 
-.host-copy h5 {
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    color: #1f3d0f;
-    margin-bottom: 0.2rem;
+.host-text {
+    margin: 1rem;
 }
 
-.host-copy p {
-    color: #2f3d2e;
-    line-height: 1.35;
-}
 
 /* Tablet */
 @media (max-width: 1000px) {

@@ -44,51 +44,51 @@
                 <a class="slider-title">FIFA<br>WORLD CUP<br>2026</a>
                 <a>48 NATIONEN. 3 GASTGEBERLÄNDER. EIN TRAUM.</a>
                 <section class="slider-actions">
-                    <button class="slider-btn">SPIELPLAN ANSEHEN &gt;</button>
+                    <button class="slider-btn">SPIELPLAN ANSEHEN <i class="fa fa-chevron-right"></i></button>
                     <button class="slider-btn slider-btn-secondary">TEAMS ENTDECKEN</button>
                 </section>
             </section>
         </figure>
     </section>
 
-    <script>
-        const banner = document.querySelector('.slider img');
-        if (banner) {
-            const url = new URL(banner.getAttribute('src'), window.location.href);
-            url.searchParams.set('v', String(Date.now()));
-            banner.src = url.toString();
-        }
-    </script>
-
     <section class="content">
         <article class="card">
             <h4>DIE GASTGEBERLÄNDER</h4>
             <section class="host-list">
-                <section class="card no-shadow host-card">
-                    <img class="host-flag" src="https://flagcdn.com/w80/us.png" alt="Flagge USA">
-                    <section class="host-copy">
-                        <h5>USA</h5>
-                        <p>Modernste Stadien und Rekordzuschauerzahlen.</p>
+                <section class="card interactive-card no-shadow host-card">
+                    <section class="host-card-content">
+                        <img class="host-flag" src="https://flagcdn.com/w80/us.png" alt="Flagge USA">
+                        <section class="host-text">
+                            <h5>USA</h5>
+                            <p>Modernste Stadien und Rekordzuschauerzahlen.</p>
+                        </section>
                     </section>
+                    <img class="banner" src="src/assets/usnyc-banner.png">
                 </section>
 
-                <section class="card no-shadow host-card">
-                    <img class="host-flag" src="https://flagcdn.com/w80/mx.png" alt="Flagge Mexiko">
-                    <section class="host-copy">
-                        <h5>MEXIKO</h5>
-                        <p>Erstes Land mit drei ausgetragenen Weltmeisterschaften.</p>
+                <section class="card interactive-card no-shadow host-card">
+                    <section class="host-card-content">
+                        <img class="host-flag" src="https://flagcdn.com/w80/mx.png" alt="Flagge Mexiko">
+                        <section class="host-text">
+                            <h5>MEXIKO</h5>
+                            <p>Erstes Land mit drei ausgetragenen Weltmeisterschaften.</p>
+                        </section>
                     </section>
+                    <img class="banner" src="src/assets/mxmex-banner.png">
                 </section>
 
-                <section class="card no-shadow host-card">
-                    <img class="host-flag" src="https://flagcdn.com/w80/ca.png" alt="Flagge Kanada">
-                    <section class="host-copy">
-                        <h5>KANADA</h5>
-                        <p>Neue Fußballbegeisterung und moderne Arenen.</p>
+                <section class="card interactive-card no-shadow host-card">
+                    <section class="host-card-content">
+                        <img class="host-flag" src="https://flagcdn.com/w80/ca.png" alt="Flagge Kanada">
+                        <section class="host-text">
+                            <h5>KANADA</h5>
+                            <p>Neue Fußballbegeisterung und moderne Arenen.</p>
+                        </section>
                     </section>
+                    <img class="banner" src="src/assets/cator-banner.png">
                 </section>
 
-                <a href="#">MEHR ERFAHREN &#8594;</a>
+                <a href="#">MEHR ERFAHREN <i class="fa fa-chevron-right"></i></a>
             </section>
         </article>
     </section>
@@ -108,99 +108,126 @@
     <section class="content">
         <article class="card">
             <h4>COUNTDOWN ZUM FINALE</h4>
+            <!-- UNIX: 1784487600 -->
+            <!-- 2026/07/19 -->
         </article>
     </section>
-    
+
     <section class="content">
         <article class="card">
             <h4>GRUPPENPHASE</h4>
-            <section class="card no-shadow no-mb flex">
+            <section class="card interactive-card no-shadow no-mb flex">
                 <a>GRUPPE A</a>
                 <section class="grid4c mr-auto ml-auto">
-                    <img class="flag" src="https://flagcdn.com/w80/mx.png" alt="Mexico">
-                    <img class="flag" src="https://flagcdn.com/w80/kr.png" alt="South Korea">
-                    <img class="flag" src="https://flagcdn.com/w80/cz.png" alt="Czechia">
-                    <img class="flag" src="https://flagcdn.com/w80/za.png" alt="Southafrica">
+                    <img class="flag" src="https://flagcdn.com/w80/mx.png" title="Mexico" alt="Mexico">
+                    <img class="flag" src="https://flagcdn.com/w80/kr.png" title="South Korea" alt="South Korea">
+                    <img class="flag" src="https://flagcdn.com/w80/cz.png" title="Czechia" alt="Czechia">
+                    <img class="flag" src="https://flagcdn.com/w80/za.png" title="Southafrica" alt="South Africa">
                 </section>
                 <a><i class="fa fa-chevron-right"></i></a>
             </section>
-            <section class="card no-shadow no-mb flex">
+            <section class="card interactive-card no-shadow no-mb flex">
                 <a>GRUPPE B</a>
                 <section class="grid4c mr-auto ml-auto">
-                    <img class="flag" src="https://flagcdn.com/w80/ch.png" alt="Switzerland">
-                    <img class="flag" src="https://flagcdn.com/w80/ca.png" alt="CANADA">
-                    <img class="flag" src="https://flagcdn.com/w80/qa.png" alt="Qatar">
-                    <img class="flag" src="https://flagcdn.com/w80/ba.png" alt="Bosnia and Herzegovina">
+                    <img class="flag" src="https://flagcdn.com/w80/ch.png" title="Switzerland" alt="Switzerland">
+                    <img class="flag" src="https://flagcdn.com/w80/ca.png" title="Canada" alt="Canada">
+                    <img class="flag" src="https://flagcdn.com/w80/qa.png" title="Qatar" alt="Qatar">
+                    <img class="flag" src="https://flagcdn.com/w80/ba.png" title="Bosnia and Herzegovina"
+                        alt="Bosnia and Herzegovina">
                 </section>
                 <a><i class="fa fa-chevron-right"></i></a>
             </section>
-            <section class="card no-shadow no-mb flex">
+            <section class="card interactive-card no-shadow no-mb flex">
                 <a>GRUPPE C</a>
                 <section class="grid4c mr-auto ml-auto">
-                    <img class="flag" src="https://flagcdn.com/w80/gb-sct.png" alt="Scotland">
-                    <img class="flag" src="https://flagcdn.com/w80/ma.png" alt="Morocco">
-                    <img class="flag" src="https://flagcdn.com/w80/br.png" alt="Brazil">
-                    <img class="flag" src="https://flagcdn.com/w80/ht.png" alt="Haiti">
+                    <img class="flag" src="https://flagcdn.com/w80/gb-sct.png" title="Scotland" alt="Scotland">
+                    <img class="flag" src="https://flagcdn.com/w80/ma.png" title="Morocco" alt="Morocco">
+                    <img class="flag" src="https://flagcdn.com/w80/br.png" title="Brazil" alt="Brazil">
+                    <img class="flag" src="https://flagcdn.com/w80/ht.png" title="Haiti" alt="Haiti">
                 </section>
                 <a><i class="fa fa-chevron-right"></i></a>
             </section>
-            <section class="card no-shadow no-mb flex">
+            <section class="card interactive-card no-shadow no-mb flex">
                 <a>GRUPPE D</a>
                 <section class="grid4c mr-auto ml-auto">
-                    <img class="flag" src="https://flagcdn.com/w80/us.png" alt="USA">
-                    <img class="flag" src="https://flagcdn.com/w80/au.png" alt="Australia">
-                    <img class="flag" src="https://flagcdn.com/w80/tr.png" alt="Türkiye">
-                    <img class="flag" src="https://flagcdn.com/w80/py.png" alt="Paraguay">
+                    <img class="flag" src="https://flagcdn.com/w80/us.png" title="USA" alt="USA">
+                    <img class="flag" src="https://flagcdn.com/w80/au.png" title="Australia" alt="Australia">
+                    <img class="flag" src="https://flagcdn.com/w80/tr.png" title="Türkiye" alt="Türkiye">
+                    <img class="flag" src="https://flagcdn.com/w80/py.png" title="Paraguay" alt="Paraguay">
                 </section>
                 <a><i class="fa fa-chevron-right"></i></a>
             </section>
-            <section class="card no-shadow no-mb flex">
+            <section class="card interactive-card no-shadow no-mb flex">
                 <a>GRUPPE E</a>
                 <section class="grid4c mr-auto ml-auto">
-                    <img class="flag" src="https://flagcdn.com/w80/de.png" alt="Germany">
-                    <img class="flag" src="https://flagcdn.com/w80/ci.png" alt="Ivory Coast">
-                    <img class="flag" src="https://flagcdn.com/w80/ec.png" alt="Ecuador">
-                    <img class="flag" src="https://flagcdn.com/w80/cw.png" alt="Curacao">
+                    <img class="flag" src="https://flagcdn.com/w80/de.png" title="Germany" alt="Germany">
+                    <img class="flag" src="https://flagcdn.com/w80/ci.png" title="Ivory Coast" alt="Ivory Coast">
+                    <img class="flag" src="https://flagcdn.com/w80/ec.png" title="Ecuador" alt="Ecuador">
+                    <img class="flag" src="https://flagcdn.com/w80/cw.png" title="Curacao" alt="Curacao">
                 </section>
                 <a><i class="fa fa-chevron-right"></i></a>
             </section>
-            <section class="card no-shadow no-mb flex">
+            <section class="card interactive-card no-shadow no-mb flex">
                 <a>GRUPPE F</a>
                 <section class="grid4c mr-auto ml-auto">
-                    <img class="flag" src="https://flagcdn.com/w80/se.png" alt="Sweden">
-                    <img class="flag" src="https://flagcdn.com/w80/jp.png" alt="Japan">
-                    <img class="flag" src="https://flagcdn.com/w80/nl.png" alt="Netherlands">
-                    <img class="flag" src="https://flagcdn.com/w80/tn.png" alt="Tunisia">
+                    <img class="flag" src="https://flagcdn.com/w80/se.png" title="Sweden" alt="Sweden">
+                    <img class="flag" src="https://flagcdn.com/w80/jp.png" title="Japan" alt="Japan">
+                    <img class="flag" src="https://flagcdn.com/w80/nl.png" title="Netherlands" alt="Netherlands">
+                    <img class="flag" src="https://flagcdn.com/w80/tn.png" title="Tunisia" alt="Tunisia">
                 </section>
                 <a><i class="fa fa-chevron-right"></i></a>
             </section>
-            <section class="card no-shadow no-mb flex">
+            <section class="card interactive-card no-shadow no-mb flex">
                 <a>GRUPPE G</a>
                 <section class="grid4c mr-auto ml-auto">
-                    <img class="flag" src="https://flagcdn.com/w80/be.png" alt="Belgium">
-                    <img class="flag" src="https://flagcdn.com/w80/eg.png" alt="Egypt">
-                    <img class="flag" src="https://flagcdn.com/w80/ir.png" alt="Iran">
-                    <img class="flag" src="https://flagcdn.com/w80/nz.png" alt="New Zealand">
+                    <img class="flag" src="https://flagcdn.com/w80/be.png" title="Belgium" alt="Belgium">
+                    <img class="flag" src="https://flagcdn.com/w80/eg.png" title="Egypt" alt="Egypt">
+                    <img class="flag" src="https://flagcdn.com/w80/ir.png" title="Iran" alt="Iran">
+                    <img class="flag" src="https://flagcdn.com/w80/nz.png" title="New Zealand" alt="New Zealand">
                 </section>
                 <a><i class="fa fa-chevron-right"></i></a>
             </section>
-            <section class="card no-shadow flex">
+            <section class="card interactive-card no-shadow flex">
                 <a>GRUPPE H</a>
                 <section class="grid4c mr-auto ml-auto">
-                    <img class="flag" src="https://flagcdn.com/w80/uy.png" alt="Uruguay">
-                    <img class="flag" src="https://flagcdn.com/w80/sa.png" alt="Saudi Arabia">
-                    <img class="flag" src="https://flagcdn.com/w80/es.png" alt="Spain">
-                    <img class="flag" src="https://flagcdn.com/w80/cv.png" alt="Cabo Verde">
+                    <img class="flag" src="https://flagcdn.com/w80/uy.png" title="Uruguay" alt="Uruguay">
+                    <img class="flag" src="https://flagcdn.com/w80/sa.png" title="Saudi Arabia" alt="Saudi Arabia">
+                    <img class="flag" src="https://flagcdn.com/w80/es.png" title="Spain" alt="Spain">
+                    <img class="flag" src="https://flagcdn.com/w80/cv.png" title="Cabo Verde" alt="Cabo Verde">
                 </section>
                 <a><i class="fa fa-chevron-right"></i></a>
             </section>
-            <a href="#">ALLE GRUPPEN <i class=" fa fa-arrow-right"></i></a>
+            <a href="#">ALLE GRUPPEN <i class=" fa fa-chevron-right"></i></a>
         </article>
     </section>
 
     <section class="content">
         <article class="card">
             <h4>TURNIER IN ZAHLEN</h4>
+            <section class="grid2c2r">
+                <section class="card no-mb">
+                    <i class="fa fa-users"></i>
+                    <h4>48</h4>
+                    <p>Teams</p>
+                </section>
+                <section class="card no-mb">
+                    <i class="fa-solid fa-futbol"></i>
+                    <h4>104</h4>
+                    <p>Spiele</p>
+                </section>
+                <section class="card no-mb">
+                    <i class="fa fa-location-dot"></i> 
+                    <h4>16</h4>
+                    <p>Stadien</p>
+                </section>
+                <section class="card no-mb">
+                    <i class="fa fa-calendar"></i>
+                    <p>Juni - Juli</p>
+                    <h4>2026</h4>
+                </section>
+
+                <a href="#">MEHR STATISTIKEN <i class="fa fa-chevron-right"></i></a>
+            </section>
         </article>
     </section>
 
