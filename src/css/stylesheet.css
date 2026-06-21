@@ -319,6 +319,25 @@ nav .tab:focus-visible {
     border-color: rgb(70 109 29 / 30%);
 }
 
+.card--news {
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.card--news>h4,p,a {
+    padding-left: calc(var(--layout-scale) * 0.5);
+    padding-right: calc(var(--layout-scale) * 0.5);
+    margin-bottom: calc(var(--layout-scale) * 0.2);
+}
+
+.card--news>img {
+    width: 100%;
+    height: calc(var(--layout-scale) * 1.75);
+    border-radius: calc(var(--layout-scale) * 0.2) calc(var(--layout-scale) * 0.2) 0 0;
+    object-fit: cover;
+}
+
 .card--host {
     display: flex;
     position: relative;
