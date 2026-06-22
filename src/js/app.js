@@ -5,29 +5,39 @@
 * Description: Description
 */
 
+import { TIME_CALCULATIONS } from './lib/utility/constants.js';
+
 const finaleTimestamp = 1784487600;
 const newsAPI = "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/news";
 const teamsAPI = "https://worldcup26.ir/get/teams";
 const gamesAPI = "https://worldcup26.ir/get/games";
 const newsBaseURL = "https://www.espn.com/soccer/story/_/id/";
 
+const [daysEl, hoursEl, minutesEl, secondsEl] = [
+    'countdownCardDays',
+    'countdownCardHours',
+    'countdownCardMinutes',
+    'countdownCardSeconds'
+].map(id => document.getElementById(id));
+
 /// A function to automatically calculate the time difference between now and the finale
 /// of the 2026 World Cup and displaying it. Also hides the whole card when we are past this
 /// timestamp.
+/// returns: a bool depending on if the finale has already started/passed
 function updateCountdown() {
-    const now = Math.floor(Date.now() / 1000);
+    const now = Math.floor(Date.now() / TIME_CALCULATIONS.MILLISECONDS_TO_SECONDS);
     // Return false and end the function if the finale has already passed.
     if (now > finaleTimestamp) return false;
     let remaining = Math.max(0, finaleTimestamp - now);
 
-    document.getElementById('countdownCardDays').textContent = String(Math.floor(remaining / 86400));
-    remaining %= 86400;
+    daysEl.textContent = String(Math.floor(remaining / TIME_CALCULATIONS.DAY_TO_SECONDS));
+    remaining %= TIME_CALCULATIONS.DAY_TO_SECONDS;
 
-    document.getElementById('countdownCardHours').textContent = String(Math.floor(remaining / 3600));
-    remaining %= 3600;
+    hoursEl.textContent = String(Math.floor(remaining / TIME_CALCULATIONS.HOUR_TO_SECONDS));
+    remaining %= TIME_CALCULATIONS.HOUR_TO_SECONDS;
 
-    document.getElementById('countdownCardMinutes').textContent = String(Math.floor(remaining / 60));
-    document.getElementById('countdownCardSeconds').textContent = String(Math.floor(remaining % 60));
+    minutesEl.textContent = String(Math.floor(remaining / TIME_CALCULATIONS.MINUTE_TO_SECONDS));
+    secondsEl.textContent = String(Math.floor(remaining % TIME_CALCULATIONS.MINUTE_TO_SECONDS));
     return true;
 }
 
@@ -37,7 +47,8 @@ else
     document.getElementById('countdownCard').classList.add('hide');
 
 
-
+/// Fetch a document from an URL
+/// returns: a bool depending if the fetching process worked
 async function fetchFromURL(url) {
     try {
         const response = await fetch(url);
@@ -95,6 +106,7 @@ async function getGameData() {
     console.log(teamsData);
 }
 
+/// Fetches the current news to the World Cup 2026 from www.espn.com. And adds them to the newsContainer.
 async function getNews() {
     let newsData = await fetchFromURL(newsAPI);
     if (newsData == null) {
