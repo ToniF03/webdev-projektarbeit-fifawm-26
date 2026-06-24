@@ -27,6 +27,41 @@ let futureGames = [];
 let teamsData = [];
 let stadiumsData = [];
 
+// Tip storage helpers
+function loadTips() {
+    try {
+        const raw = localStorage.getItem('tips') || '{}';
+        const parsed = JSON.parse(raw);
+        console.debug('[tips] loadTips', parsed);
+        return parsed;
+    }
+    catch (e) {
+        console.error('[tips] loadTips error', e);
+        return {};
+    }
+}
+
+function saveTips(tips) {
+    try {
+        localStorage.setItem('tips', JSON.stringify(tips));
+        console.debug('[tips] saveTips', tips);
+    }
+    catch (e) { console.error('[tips] saveTips error', e); }
+}
+
+// Expose quick debug helper
+window.debugShowTips = function () { console.log('[tips] current', loadTips()); };
+
+function computePointsForTip(tip, match) {
+    const actualHome = match["home_score"] ?? match["home_team_score"];
+    const actualAway = match["away_score"] ?? match["away_team_score"];
+    if (actualHome == null || actualAway == null) return 0;
+    let points = 0;
+    if (Number(tip.home) === Number(actualHome)) points += 50;
+    if (Number(tip.away) === Number(actualAway)) points += 50;
+    return points;
+}
+
 /// A function to automatically calculate the time difference between now and the finale
 /// of the 2026 World Cup and displaying it. Also hides the whole card when we are past this
 /// timestamp.
@@ -370,6 +405,150 @@ function createScheduleMatchCard(match) {
     footer.append(location);
 
     matchCard.append(header, body, footer);
+
+    // Tip panel (collapsed by default)
+    const matchId = match['id'] ?? match['match_id'] ?? `${match['home_team_id']}_${match['away_team_id']}_${match['local_date']}`;
+    const tips = loadTips();
+    const existingTip = tips[matchId];
+
+    const tipPanel = document.createElement('div');
+    tipPanel.classList.add('tip-panel');
+    tipPanel.hidden = true;
+
+    if (status === 'finished') {
+        // show last tip and points (no input)
+        const summary = document.createElement('div');
+        summary.classList.add('tip-summary');
+        if (existingTip) {
+            const pts = computePointsForTip(existingTip, match);
+            existingTip.points = pts; // update stored points
+            tips[matchId] = existingTip;
+            saveTips(tips);
+            summary.innerHTML = `<strong>Ihr Tipp:</strong> ${existingTip.home} : ${existingTip.away} — <strong>Punkte:</strong> ${pts}`;
+        }
+        else {
+            summary.textContent = 'Kein Tipp abgegeben.';
+        }
+        tipPanel.append(summary);
+    }
+    else {
+        // render form to submit tip
+        const form = document.createElement('form');
+        form.classList.add('tip-form');
+
+        const tipBox = document.createElement('div');
+        tipBox.classList.add('tip-box');
+
+        const left = document.createElement('div');
+        left.classList.add('score-cell');
+        const leftLabel = document.createElement('div');
+        leftLabel.classList.add('team-label');
+        leftLabel.textContent = match['home_team_name_en'];
+        const homeInput = document.createElement('input');
+        homeInput.type = 'number';
+        homeInput.min = '0';
+        homeInput.classList.add('tip-input');
+        homeInput.value = existingTip?.home ?? '';
+        left.append(leftLabel, homeInput);
+
+        const vs = document.createElement('div');
+        vs.classList.add('vs-sep');
+        vs.textContent = 'VS';
+
+        const right = document.createElement('div');
+        right.classList.add('score-cell');
+        const rightLabel = document.createElement('div');
+        rightLabel.classList.add('team-label');
+        rightLabel.textContent = match['away_team_name_en'];
+        const awayInput = document.createElement('input');
+        awayInput.type = 'number';
+        awayInput.min = '0';
+        awayInput.classList.add('tip-input');
+        awayInput.value = existingTip?.away ?? '';
+        right.append(rightLabel, awayInput);
+
+        tipBox.append(left, vs, right);
+
+        const submit = document.createElement('button');
+        submit.type = 'submit';
+        submit.classList.add('tip-submit');
+        submit.textContent = 'Tipp speichern';
+
+        const msg = document.createElement('div');
+        msg.classList.add('tip-message');
+
+        form.append(tipBox, submit, msg);
+
+        // badge will be attached to the tip toggle (created later)
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const h = homeInput.value === '' ? null : Number(homeInput.value);
+            const a = awayInput.value === '' ? null : Number(awayInput.value);
+            if (h == null || a == null) {
+                msg.textContent = 'Bitte für beide Teams eine Zahl eingeben.';
+                return;
+            }
+            const newTip = { home: h, away: a, timestamp: Date.now() };
+            tips[matchId] = newTip;
+            saveTips(tips);
+            msg.textContent = 'Tipp gespeichert.';
+
+            // update badge
+            if (tipToggle) {
+                let badge = tipToggle.querySelector('.tip-badge');
+                if (!badge) {
+                    badge = document.createElement('span');
+                    badge.classList.add('tip-badge');
+                    tipToggle.append(badge);
+                }
+                badge.textContent = `${newTip.home}:${newTip.away}`;
+            }
+
+            setTimeout(() => msg.textContent = '', 2500);
+        });
+
+        tipPanel.append(form);
+    }
+
+    matchCard.append(tipPanel);
+
+    // Add a visible tip toggle button in the header so users see where to tip
+    const tipToggle = document.createElement('button');
+    tipToggle.type = 'button';
+    tipToggle.classList.add('tip-toggle');
+    tipToggle.setAttribute('aria-expanded', 'false');
+    tipToggle.title = status === 'finished' ? 'Tipp anzeigen' : 'Tipp abgeben';
+    tipToggle.innerHTML = `<i class="fa fa-hand-pointer" aria-hidden="true"></i> <span class="tip-toggle-label">Tipp</span>`;
+    // append to header (header is in scope)
+    header.append(tipToggle);
+
+    // attach initial badge if a tip exists
+    if (existingTip) {
+        let badge = tipToggle.querySelector('.tip-badge');
+        if (!badge) {
+            badge = document.createElement('span');
+            badge.classList.add('tip-badge');
+            tipToggle.append(badge);
+        }
+        badge.textContent = `${existingTip.home}:${existingTip.away}`;
+    }
+
+    // Toggle expansion when clicking the card (but ignore clicks on interactive controls)
+    matchCard.addEventListener('click', (e) => {
+        if (e.target.closest('a') || e.target.closest('button') || e.target.closest('input')) return;
+        matchCard.classList.toggle('is-expanded');
+        tipPanel.hidden = !matchCard.classList.contains('is-expanded');
+        tipToggle.setAttribute('aria-expanded', String(matchCard.classList.contains('is-expanded')));
+    });
+
+    // Also make the tipToggle button explicit control for the panel
+    tipToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        matchCard.classList.toggle('is-expanded');
+        tipPanel.hidden = !matchCard.classList.contains('is-expanded');
+        tipToggle.setAttribute('aria-expanded', String(matchCard.classList.contains('is-expanded')));
+    });
 
     return matchCard;
 }
