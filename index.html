@@ -23,7 +23,7 @@
     <meta property="og:image" content="image.jpg">
 
     <!-- Scripts -->
-    <script src="src/js/app.js" defer></script>
+    <script src="src/js/app.js" type="module" defer></script>
 
     <!-- Multimedia -->
     <link rel="icon" type="image/svg" href="src/assets/favicon.png">
@@ -54,6 +54,19 @@
             </div>
         </figure>
     </div>
+
+    <article class="card content grid-span-full hide">
+        <a class="tr"><i class="fa fa-circle" id="live-circle"></i> '01:02</a>
+        <div class="grid grid2c">
+            <h4>Spain</h4>
+            <h4 class="tr">Saudi Arabia</h4>
+        </div>
+        <div class="grid grid3c">
+            <h4 class="tr">3</h4>
+            <h4 class="tc">-</h4>
+            <h4>0</h4>
+        </div>
+    </article>
 
     <article class="card content">
         <h4>DIE GASTGEBERLÄNDER</h4>
@@ -231,8 +244,8 @@
                 <div class="grid grid2c">
                     <i class="fa fa-users align-self-center fs-2"></i>
                     <section>
-                        <h4>48</h4>
-                        <p>Teams</p>
+                        <h4 class="tc">48</h4>
+                        <p class="tc">Teams</p>
                     </section>
                 </div>
             </div>
@@ -241,8 +254,8 @@
                 <div class="grid grid2c">
                     <i class="fa-solid fa-futbol align-self-center fs-2"></i>
                     <section>
-                        <h4>104</h4>
-                        <p>Spiele</p>
+                        <h4 class="tc">104</h4>
+                        <p class="tc">Spiele</p>
                     </section>
                 </div>
             </div>
@@ -251,8 +264,8 @@
                 <div class="grid grid2c">
                     <i class="fa fa-location-dot align-self-center fs-2"></i>
                     <section>
-                        <h4>16</h4>
-                        <p>Stadien</p>
+                        <h4 class="tc">16</h4>
+                        <p class="tc">Stadien</p>
                     </section>
                 </div>
             </div>
@@ -261,23 +274,23 @@
                 <div class="grid grid2c">
                     <i class="fa fa-calendar align-self-center fs-2"></i>
                     <section>
-                        <p>Juni - Juli</p>
-                        <h4>2026</h4>
+                        <p class="tc">Juni - Juli</p>
+                        <h4 class="tc">2026</h4>
                     </section>
                 </div>
             </div>
 
-            <a href="#">MEHR STATISTIKEN <i class="fa fa-chevron-right"></i></a>
         </div>
+        <a href="#">MEHR STATISTIKEN <i class="fa fa-chevron-right"></i></a>
     </article>
 
     <article class="card content">
         <h4>FAN-ZONE</h4>
     </article>
 
-    <article class="card content">
-        <h4>AKTUELLE SPIELE</h4>
-    </article>
+    <section class="card content" id="upcomingMatchesContainer">
+        <h4>FOLLOWING MATCHES</h4>    
+    </section>
 </body>
 
 </html>
