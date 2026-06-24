@@ -156,9 +156,7 @@ function buildGroupCards() {
     if (!groupContainer)
         return;
 
-    let sortedGroups = [];
-
-    sortedGroups = teamsData.teams.reduce((groups, team) => {
+    let sortedGroups = teamsData.teams.reduce((groups, team) => {
         const group = team.groups;
 
         if (!groups[group]) {
@@ -254,7 +252,7 @@ function buildFollowingGamesCards() {
         gameTimeIcon.classList.add('fa-calendar');
         gameTime.append(gameTimeIcon);
 
-        let timeDifference = 0;
+        let timeDifference;
 
         if (match['stadium_id'] < 4)
             timeDifference = 6
@@ -282,7 +280,7 @@ function buildFollowingGamesCards() {
 }
 
 function getMatchDate(match) {
-    let timeDifference = 0;
+    let timeDifference;
 
     if (match['stadium_id'] < 4)
         timeDifference = 6;
