@@ -9,6 +9,7 @@ import { TIME_CALCULATIONS, API_LINKS, FINALE_TIMESTAMP } from './lib/utility/co
 
 const displayedMatches = 3;
 const displayedGroups = 5;
+const isSchedulePage = document.body.classList.contains('schedule-page');
 
 const [daysEl, hoursEl, minutesEl, secondsEl] = [
     'countdownCardDays',
@@ -16,6 +17,8 @@ const [daysEl, hoursEl, minutesEl, secondsEl] = [
     'countdownCardMinutes',
     'countdownCardSeconds'
 ].map(id => document.getElementById(id));
+
+const countdownCard = document.getElementById('countdownCard');
 
 let finishedGames = [];
 let ongoingGames = [];
@@ -45,10 +48,12 @@ function updateCountdown() {
     return true;
 }
 
-if (updateCountdown())
-    setInterval(updateCountdown, 1000);
-else
-    document.getElementById('countdownCard').classList.add('hide');
+if (daysEl && hoursEl && minutesEl && secondsEl && countdownCard) {
+    if (updateCountdown())
+        setInterval(updateCountdown, 1000);
+    else
+        countdownCard.classList.add('hide');
+}
 
 
 /// Fetch a document from an URL
@@ -101,12 +106,19 @@ async function getGameData() {
     stadiumsData = await fetchFromURL(API_LINKS.STADIUMS_API);
     stadiumsData.stadiums.sort((a, b) => a.id - b.id);
 
-    buildFollowingGamesCards();
-    buildGroupCards();
+    if (isSchedulePage)
+        buildScheduleCards();
+    else {
+        buildFollowingGamesCards();
+        buildGroupCards();
+    }
 }
 
 function buildGroupCards() {
     let groupContainer = document.getElementById("groupContainer");
+
+    if (!groupContainer)
+        return;
 
     let sortedGroups = [];
 
@@ -159,10 +171,18 @@ function buildGroupCards() {
 function buildFollowingGamesCards() {
     const upcomingMatchesContainer = document.getElementById('upcomingMatchesContainer');
 
-    if (futureGames.length == 0) upcomingMatchesContainer.classList.add('hide');
+    if (!upcomingMatchesContainer)
+        return;
+
+    if (futureGames.length == 0) {
+        upcomingMatchesContainer.classList.add('hide');
+        return;
+    }
 
     for (let i = 0; i < displayedMatches; i++) {
         let match = futureGames[i];
+        if (!match)
+            break;
         let homeTeam = teamsData["teams"][match["home_team_id"] - 1];
         let awayTeam = teamsData["teams"][match["away_team_id"] - 1];
         let stadium = stadiumsData["stadiums"][match["stadium_id"] - 1];
@@ -227,18 +247,210 @@ function buildFollowingGamesCards() {
     }
 }
 
+function getMatchDate(match) {
+    let timeDifference = 0;
+
+    if (match['stadium_id'] < 4)
+        timeDifference = 6;
+    else if (match['stadium_id'] < 7)
+        timeDifference = 5;
+    else if (match['stadium_id'] < 13)
+        timeDifference = 4;
+    else
+        timeDifference = 7;
+
+    return new Date(match["local_date"] + " GMT-0" + String(timeDifference) + "00");
+}
+
+function getMatchStatusLabel(match) {
+    const status = String(match["time_elapsed"] ?? "").toLowerCase();
+
+    if (status == "finished")
+        return "Beendet";
+    if (status == "notstarted")
+        return "Bevorstehend";
+    return "Live";
+}
+
+function getMatchScoreText(match) {
+    const status = String(match["time_elapsed"] ?? "").toLowerCase();
+
+    if (status == "notstarted")
+        return "VS";
+
+    const homeScore = match["home_team_score"];
+    const awayScore = match["away_team_score"];
+
+    if (homeScore == null || awayScore == null)
+        return "-";
+
+    return `${homeScore} : ${awayScore}`;
+}
+
+function createScheduleMatchCard(match) {
+    let homeTeam = teamsData["teams"][match["home_team_id"] - 1];
+    let awayTeam = teamsData["teams"][match["away_team_id"] - 1];
+    let stadium = stadiumsData["stadiums"][match["stadium_id"] - 1];
+    let status = String(match["time_elapsed"] ?? "").toLowerCase();
+
+    let matchCard = document.createElement('article');
+    matchCard.classList.add('card', 'schedule-match-card');
+
+    let header = document.createElement('div');
+    header.classList.add('schedule-match-card__header');
+
+    let statusBadge = document.createElement('span');
+    statusBadge.classList.add('schedule-match-card__status');
+    if (status == "finished")
+        statusBadge.classList.add('schedule-match-card__status--finished');
+    else if (status != "notstarted")
+        statusBadge.classList.add('schedule-match-card__status--live');
+    statusBadge.textContent = getMatchStatusLabel(match);
+
+    let timeLabel = document.createElement('span');
+    timeLabel.classList.add('schedule-match-card__time');
+
+    let timeIcon = document.createElement('i');
+    timeIcon.classList.add('fa', 'fa-calendar');
+    timeLabel.append(timeIcon, ` ${getMatchDate(match).toLocaleString("de-DE", { dateStyle: 'medium', timeStyle: 'short' })}`);
+
+    header.append(statusBadge, timeLabel);
+
+    let body = document.createElement('div');
+    body.classList.add('schedule-match-card__body');
+
+    let homeBlock = document.createElement('div');
+    homeBlock.classList.add('schedule-match-card__team');
+
+    let homeFlag = document.createElement('img');
+    homeFlag.alt = match["home_team_name_en"];
+    homeFlag.src = homeTeam.flag;
+    homeFlag.loading = 'lazy';
+    homeFlag.classList.add('flag');
+
+    let homeName = document.createElement('div');
+    let homeTitle = document.createElement('h4');
+    homeTitle.textContent = match["home_team_name_en"];
+    let homeSubtitle = document.createElement('p');
+    homeSubtitle.textContent = 'Heimteam';
+    homeName.append(homeTitle, homeSubtitle);
+
+    homeBlock.append(homeFlag, homeName);
+
+    let score = document.createElement('div');
+    score.classList.add('schedule-match-card__score');
+    score.textContent = getMatchScoreText(match);
+
+    let awayBlock = document.createElement('div');
+    awayBlock.classList.add('schedule-match-card__team', 'schedule-match-card__team--away');
+
+    let awayName = document.createElement('div');
+    let awayTitle = document.createElement('h4');
+    awayTitle.textContent = match["away_team_name_en"];
+    let awaySubtitle = document.createElement('p');
+    awaySubtitle.textContent = 'Gastteam';
+    awayName.append(awayTitle, awaySubtitle);
+
+    let awayFlag = document.createElement('img');
+    awayFlag.alt = match["away_team_name_en"];
+    awayFlag.src = awayTeam.flag;
+    awayFlag.loading = 'lazy';
+    awayFlag.classList.add('flag', 'justify-self-right');
+
+    awayBlock.append(awayName, awayFlag);
+
+    body.append(homeBlock, score, awayBlock);
+
+    let footer = document.createElement('div');
+    footer.classList.add('schedule-match-card__footer');
+
+    let location = document.createElement('span');
+    location.classList.add('schedule-match-card__location');
+
+    let locationIcon = document.createElement('i');
+    locationIcon.classList.add('fa', 'fa-location-dot');
+    location.append(locationIcon, ` ${stadium.fifa_name}, ${stadium.city_en}, ${stadium.country_en}`);
+
+    footer.append(location);
+
+    matchCard.append(header, body, footer);
+
+    return matchCard;
+}
+
+function buildScheduleCards() {
+    const scheduleContainer = document.querySelector('.schedule-layout');
+    const finishedContainer = document.getElementById('scheduleFinishedMatchesContainer');
+    const ongoingContainer = document.getElementById('scheduleOngoingMatchesContainer');
+    const upcomingContainer = document.getElementById('scheduleUpcomingMatchesContainer');
+    const statsContainer = document.getElementById('spielplanStats');
+
+    if (statsContainer) {
+        statsContainer.innerHTML = '';
+
+        const stats = [
+            { value: finishedGames.length, label: 'Beendet' },
+            { value: ongoingGames.length, label: 'Live' },
+            { value: futureGames.length, label: 'Bevorstehend' }
+        ];
+
+        stats.forEach(stat => {
+            const statCard = document.createElement('article');
+            statCard.classList.add('card', 'schedule-stat');
+
+            const value = document.createElement('strong');
+            value.textContent = String(stat.value);
+
+            const label = document.createElement('span');
+            label.textContent = stat.label;
+
+            statCard.append(value, label);
+            statsContainer.append(statCard);
+        });
+    }
+
+    const sections = [
+        [finishedContainer, finishedGames],
+        [ongoingContainer, ongoingGames],
+        [upcomingContainer, futureGames]
+    ];
+    
+    sections.forEach(([container, matches]) => {
+        if (!container)
+            return;
+
+        container.innerHTML = '';
+
+        if (matches.length == 0) {
+            const emptyState = document.createElement('p');
+            emptyState.classList.add('schedule-empty-state');
+            emptyState.textContent = 'Keine Spiele in dieser Kategorie verfügbar.';
+            container.append(emptyState);
+            return;
+        }
+
+        matches.forEach(match => {
+            container.append(createScheduleMatchCard(match));
+        });
+    });
+}
+
 /// Fetches the current news to the World Cup 2026 from www.espn.com. And adds them to the newsContainer.
 async function getNews() {
+    let newsContainer = document.getElementById("newsContainer");
+    if (!newsContainer)
+        return;
+
     let newsData = await fetchFromURL(API_LINKS.NEWS_API);
     if (newsData == null) {
         console.error("Could not fetch news data")
         return;
     }
 
-    const newsContainer = document.getElementById("newsContainer");
-
     for (let i = 0; i < 2; i++) {
         let article = newsData['articles'][i];
+        if (!article)
+            break;
 
         let newsCard = document.createElement('article');
         newsCard.classList.add("card");

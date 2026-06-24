@@ -1,30 +1,115 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <!-- Browser Window -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="stylesheet.css">
-    <script type="module" src="script.js"></script>
+    <link rel="stylesheet" href="../css/stylesheet.css">
+    <link rel="stylesheet" href="../css/spielplan.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.2.1/css/all.css">
+    <script type="module" src="../js/app.js"></script>
 
     <!-- SEO -->
-    <title>Title</title>
-    <meta name="keywords" content="Keywords">
-    <meta name="description" content="Description">
+    <title>Spielplan - FIFA WM 2026</title>
+    <meta name="keywords" content="WM 2026, Spielplan, Gruppenphase, Spiele, Teams, Stadien">
+    <meta name="description" content="Kompletter Spielplan zur FIFA WM 2026.">
     <meta name="author" content="Toni Fey, Finn Konrad, Tim Zingler">
 
     <!-- Open Graph -->
     <meta property="og:locale" content="de_DE">
     <meta property="og:type" content="website">
     <meta property="og:url" content="http://143.93.245.165/project/wileecoyote/">
-    <meta property="og:title" content="Title">
-    <meta property="og:description" content="Description">
-    <meta property="og:image" content="image.jpg">
+    <meta property="og:title" content="Spielplan - FIFA WM 2026">
+    <meta property="og:description" content="Kompletter Spielplan zur FIFA WM 2026.">
+    <meta property="og:image" content="../assets/banner.png">
 
     <!-- Multimedia -->
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" href="../assets/favicon.png">
 </head>
-<body>
 
+<body class="grid schedule-page" id="spielplanPage">
+    <nav class="topbar" aria-label="Hauptnavigation">
+        <ul class="topbar-menu">
+            <li><a class="topbar-title" href="../../index.html"><img class="topbar-icon" src="../assets/favicon.png" alt="WM2026 Icon">WM2026</a></li>
+            <li><a class="tab" href="../../index.html">Home</a></li>
+            <li><a class="tab" href="./spielplan.html" aria-current="page">Spielplan</a></li>
+            <li><a class="tab" href="#">News</a></li>
+            <li><a class="tab" href="#">Liveticker</a></li>
+        </ul>
+    </nav>
+
+    <main class="schedule-layout">
+        <section class="card content schedule-hero">
+            <div class="schedule-hero-copy">
+                <span class="schedule-eyebrow"><i class="fa fa-calendar-days"></i> Aktueller Turnierplan</span>
+                <h1>Spielplan der FIFA WM 2026</h1>
+                <p>Alle Spiele werden direkt aus der API geladen und nach Status, Zeit und Austragungsort in einem kompakten Layout dargestellt.</p>
+            </div>
+
+            <div class="schedule-stat-grid" id="spielplanStats" aria-label="Spielplan-Statistiken"></div>
+        </section>
+
+        <section class="card content schedule-section">
+            <div class="schedule-section-head">
+                <div>
+                    <h2>Live</h2>
+                    <p>Aktuell laufende Spiele im Turnier.</p>
+                </div>
+            </div>
+            <div class="schedule-match-list" id="scheduleOngoingMatchesContainer"></div>
+        </section>
+
+        <section class="card content schedule-section">
+            <div class="schedule-section-head">
+                <div>
+                    <h2>Bevorstehend</h2>
+                    <p>Die nächsten angesetzten Begegnungen.</p>
+                </div>
+            </div>
+            <div class="schedule-match-list" id="scheduleUpcomingMatchesContainer"></div>
+        </section>
+
+        <section class="card content schedule-section">
+            <div class="schedule-section-head">
+                <div>
+                    <h2>Beendet</h2>
+                    <p>Abgeschlossene Partien der Weltmeisterschaft.</p>
+                </div>
+                <span class="schedule-section-hint">Aus der API geladen</span>
+            </div>
+            <div class="schedule-match-list" id="scheduleFinishedMatchesContainer"></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-grid">
+            <section>
+                <h4>NAVIGATION</h4>
+                <ul class="footer-list">
+                    <li><a href="../../index.html">Home</a></li>
+                    <li><a href="./spielplan.html">Spielplan</a></li>
+                    <li><a href="#">News</a></li>
+                    <li><a href="#">Liveticker</a></li>
+                </ul>
+            </section>
+
+            <section>
+                <h4>TURNIER</h4>
+                <ul class="footer-list">
+                    <li><a href="#">Gruppen</a></li>
+                    <li><a href="#">Teams</a></li>
+                    <li><a href="#">Stadien</a></li>
+                    <li><a href="#">Statistiken</a></li>
+                </ul>
+            </section>
+        </div>
+
+        <div class="footer-bottom">
+            <img src="../assets/favicon.png" alt="WM2026 Logo">
+            <p>Erstellt im Rahmen eines Hochschulprojekts.</p>
+        </div>
+    </footer>
 </body>
+
 </html>
