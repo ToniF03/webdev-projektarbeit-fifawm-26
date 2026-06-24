@@ -433,6 +433,42 @@ function buildScheduleCards() {
             container.append(createScheduleMatchCard(match));
         });
     });
+
+    initializeScheduleSectionToggles();
+}
+
+function initializeScheduleSectionToggles() {
+    const sections = document.querySelectorAll('.schedule-section');
+
+    sections.forEach(section => {
+        const toggle = section.querySelector('.schedule-section-toggle');
+        const contentId = toggle?.getAttribute('aria-controls');
+        const content = contentId ? document.getElementById(contentId) : null;
+
+        if (!toggle || !content)
+            return;
+
+        const updateToggle = () => {
+            const isCollapsed = section.classList.contains('is-collapsed');
+            toggle.setAttribute('aria-expanded', String(!isCollapsed));
+            toggle.querySelector('span').textContent = isCollapsed ? 'Aufklappen' : 'Einklappen';
+            const icon = toggle.querySelector('i');
+            if (icon)
+                icon.className = isCollapsed ? 'fa fa-chevron-down' : 'fa fa-chevron-up';
+        };
+
+        if (!toggle.dataset.bound) {
+            toggle.addEventListener('click', () => {
+                section.classList.toggle('is-collapsed');
+                content.hidden = section.classList.contains('is-collapsed');
+                updateToggle();
+            });
+            toggle.dataset.bound = 'true';
+        }
+
+        content.hidden = section.classList.contains('is-collapsed');
+        updateToggle();
+    });
 }
 
 /// Fetches the current news to the World Cup 2026 from www.espn.com. And adds them to the newsContainer.
