@@ -277,7 +277,7 @@
     background: linear-gradient(180deg, #fff, #f7faf0);
     padding: calc(var(--layout-scale) * 0.12);
     border-radius: 0.75rem;
-    border: 1px solid rgb(31 61 15 6%);
+    border: 1px solid rgb(31 61 15 / 6%);
 }
 
 .score-cell {
@@ -308,7 +308,7 @@
     display: inline-block;
     background: #e9f6e6;
     color: #1f3d0f;
-    border: thin solid rgb(31 61 15 6%);
+    border: thin solid rgb(31 61 15 / 6%);
     padding: 0.15rem 0.4rem;
     border-radius: 999px;
     font-weight: 700;
@@ -320,10 +320,10 @@
     width: 5.2rem;
     min-width: 4.2rem;
     padding: calc(var(--layout-scale) * 0.14);
-    border: 1px solid rgb(31 61 15 12%);
+    border: 1px solid rgb(31 61 15 / 12%);
     border-radius: 0.5rem;
     background: #ffff;
-    box-shadow: inset 0 1px 2px rgb(0 0 0 3%);
+    box-shadow: inset 0 1px 2px rgb(0 0 0 / 3%);
     text-align: center;
     font-weight: 700;
     font-size: 1rem;
@@ -332,7 +332,7 @@
 .tip-input:focus {
     outline: none;
     border-color: #2b5a1e;
-    box-shadow: 0 8px 18px rgb(43 90 30 12%);
+    box-shadow: 0 8px 18px rgb(43 90 30 / 12%);
     transform: translateY(-1px);
 }
 
@@ -340,18 +340,18 @@
     padding: calc(var(--layout-scale) * 0.18) calc(var(--layout-scale) * 0.6);
     background: #1f3d0f;
     color: #fff;
-    border: thin solid rgb(0 0 0 8%);
+    border: thin solid rgb(0 0 0 / 8%);
     border-radius: 0.5rem;
     cursor: pointer;
     font-weight: 700;
-    box-shadow: 0 6px 14px rgb(31 61 15 12%);
+    box-shadow: 0 6px 14px rgb(31 61 15 / 12%);
     transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
 }
 
 .tip-submit:hover,
 .tip-submit:focus {
     transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgb(31 61 15 18%);
+    box-shadow: 0 10px 24px rgb(31 61 15 / 18%);
     background: #2b5a1e;
     outline: none;
 }
