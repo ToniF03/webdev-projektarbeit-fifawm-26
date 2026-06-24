@@ -116,6 +116,37 @@ body.schedule-page {
     flex-wrap: wrap;
 }
 
+.schedule-section-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--layout-scale) * 0.08);
+    border: 1px solid rgb(31 61 15 / 14%);
+    border-radius: 30rem;
+    padding: calc(var(--layout-scale) * 0.1) calc(var(--layout-scale) * 0.18);
+    background: rgb(255 255 255 / 82%);
+    color: #1f3d0f;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.schedule-section-toggle:hover,
+.schedule-section-toggle:focus-visible {
+    transform: translateY(-1px);
+    background: rgb(255 255 255 / 98%);
+    box-shadow: 0 8px 18px rgb(27 45 16 / 10%);
+    outline: none;
+}
+
+.schedule-section.is-collapsed .schedule-match-list {
+    display: none;
+}
+
+.schedule-section.is-collapsed .schedule-section-toggle i {
+    transform: rotate(180deg);
+}
+
 .schedule-section-head p {
     margin-top: calc(var(--layout-scale) * 0.05);
     color: rgb(27 45 16 / 72%);
