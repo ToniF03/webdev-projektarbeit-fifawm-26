@@ -216,8 +216,6 @@ This project demonstrates the practical application of:
 
 - Toni Fey
 
-- [Finn Konrad](https://www.google.com/)
-
 ---
 
 ## License
