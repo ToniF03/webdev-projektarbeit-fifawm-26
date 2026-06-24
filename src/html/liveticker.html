@@ -5,22 +5,24 @@
     <!-- Browser Window -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="stylesheet.css">
-    <script type="module" src="script.js"></script>
+    <link rel="stylesheet" href="../css/stylesheet.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.2.1/css/all.css">
+    <script type="module" src="../js/app.js"></script>
+    <script type="module" src="../js/liveticker.js" defer></script>
 
     <!-- SEO -->
-    <title>Title</title>
-    <meta name="keywords" content="Keywords">
-    <meta name="description" content="Description">
+    <title>Liveticker — FIFA WM 2026 | Live‑Ergebnisse & Spielupdates</title>
+    <meta name="keywords" content="WM 2026, Liveticker, Spielstand, Ergebnisse, Fußball, World Cup, Live Score, Spielupdates">
+    <meta name="description" content="Echtzeit‑Liveticker zur FIFA Weltmeisterschaft 2026: aktuelle Spielstände, Live‑Updates und kurze Spielzusammenfassungen direkt auf einen Blick.">
     <meta name="author" content="Toni Fey, Finn Konrad, Tim Zingler">
 
     <!-- Open Graph -->
     <meta property="og:locale" content="de_DE">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://143.93.245.165/project/wileecoyote/">
-    <meta property="og:title" content="Title">
-    <meta property="og:description" content="Description">
-    <meta property="og:image" content="image.jpg">
+    <meta property="og:url" content="/src/html/liveticker.html">
+    <meta property="og:title" content="Liveticker — FIFA WM 2026">
+    <meta property="og:description" content="Live‑Ergebnisse und kurze Updates zu laufenden WM‑Spielen. Verfolge die Matches in Echtzeit.">
+    <meta property="og:image" content="../assets/banner.png">
 
     <!-- Multimedia -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -29,14 +31,23 @@
 <body>
     <nav class="topbar" aria-label="Hauptnavigation">
         <ul class="topbar-menu">
-            <li><a class="topbar-title"><img class="topbar-icon" src="src/assets/favicon.png"
+            <li><a class="topbar-title"><img class="topbar-icon" src="../assets/favicon.png"
                         alt="WM2026 Icon">WM2026</a></li>
-            <li><a class="tab" href="#">Home</a></li>
-            <li><a class="tab" href="src/html/spielplan.html">Spielplan</a></li>
-            <li><a class="tab" href="src/html/newsPage.html">News</a></li>
-            <li><a class="tab" href="#">Liveticker</a></li>
+            <li><a class="tab" href="../../index.html">Home</a></li>
+            <li><a class="tab" href="./spielplan.html">Spielplan</a></li>
+            <li><a class="tab" href="./newsPage.html">News</a></li>
+            <li><a class="tab" href="./liveticker.html">Liveticker</a></li>
         </ul>
     </nav>
+
+    <main class="content">
+        <article class="card content">
+            <h4>LIVETICKER</h4>
+            <div id="liveTicker" class="live-ticker">
+                <p class="muted">Lade Live‑Daten…</p>
+            </div>
+        </article>
+    </main>
 
     <footer class="footer">
         <div class="footer-grid">
@@ -54,7 +65,7 @@
         </div>
 
         <div class="footer-bottom">
-            <img src="src/assets/favicon.png" alt="WM2026 Logo">
+            <img src="../assets/favicon.png" alt="WM2026 Logo">
 
             <p>
                 Erstellt im Rahmen eines Hochschulprojekts.

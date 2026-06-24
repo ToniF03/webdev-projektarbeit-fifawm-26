@@ -28,6 +28,60 @@
     --border-color: rgb(255 255 255 / 45%);
 }
 
+/* Live ticker styles */
+.live-ticker {
+    padding: calc(var(--layout-scale) * 0.25);
+    background: linear-gradient(180deg, #ffffff, #f7faf7);
+    border-radius: calc(var(--layout-scale) * 0.15);
+}
+
+.live-ticker-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.live-ticker-item {
+    padding: calc(var(--layout-scale) * 0.25);
+    background: #fff;
+    border-radius: calc(var(--layout-scale) * 0.12);
+    box-shadow: 0 2px 6px rgb(0 0 0 / 6%);
+    font-size: 0.95rem;
+}
+
+.muted {
+    color: #666;
+    font-style: italic;
+}
+
+/* Fan zone grid */
+.fan-zone-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.fan-card h5 {
+    margin-bottom: 0.25rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+    padding: 0.45rem 0.8rem;
+    background: #1f3d0f;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 999px;
+}
+
+.btn:hover { opacity: 0.9 }
+
 .l-base :not(.l-anchor) {
     --layout-scale: max(var(--layout-scale-limit),
             calc(var(--layout-scale) - var(var(--layout-scale-step-size))))
