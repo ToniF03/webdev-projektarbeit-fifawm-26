@@ -7,8 +7,9 @@
 
 import { TIME_CALCULATIONS, API_LINKS, FINALE_TIMESTAMP } from './lib/utility/constants.js';
 
-const displayedMatches = 3;
+const displayedMatches = 2;
 const displayedGroups = 5;
+const displayedNews = 1;
 const isSchedulePage = document.body.classList.contains('schedule-page');
 
 const [daysEl, hoursEl, minutesEl, secondsEl] = [
@@ -168,8 +169,6 @@ function buildGroupCards() {
 
         return groups;
     }, {});
-
-    console.log(sortedGroups);
 
     for (let i = 0; i < displayedGroups; i++) {
         let groupCard = document.createElement('div');
@@ -666,8 +665,10 @@ async function getNews() {
     }
 
     let articles = newsData['articles'] || [];
-    // Show more articles on the news page (up to 50), otherwise keep a reasonable default.
-    const maxDefault = onNewsPage ? 50 : 12;
+    // Show more articles on the news page (up to 50).
+    // On the landing page respect `displayedNews` to limit visible items.
+    const onLandingPage = String(window.location.pathname || '').includes('index.html') || document.body.classList.contains('landing-page');
+    const maxDefault = onNewsPage ? 50 : (onLandingPage ? displayedNews : 12);
     const maxArticles = Math.min(maxDefault, articles.length);
 
     for (let i = 0; i < maxArticles; i++) {
