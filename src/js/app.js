@@ -551,7 +551,6 @@ function createScheduleMatchCard(match) {
 }
 
 function buildScheduleCards() {
-    const scheduleContainer = document.querySelector('.schedule-layout');
     const finishedContainer = document.getElementById('scheduleFinishedMatchesContainer');
     const ongoingContainer = document.getElementById('scheduleOngoingMatchesContainer');
     const upcomingContainer = document.getElementById('scheduleUpcomingMatchesContainer');
