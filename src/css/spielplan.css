@@ -252,6 +252,156 @@
     gap: calc(var(--layout-scale) * 0.08);
 }
 
+/* Tip panel inside match card */
+.tip-panel {
+    padding-top: calc(var(--layout-scale) * 0.16);
+    border-top: 1px dashed rgb(31 61 15 / 8%);
+}
+
+.tip-form {
+    display: flex;
+    gap: calc(var(--layout-scale) * 0.12);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.tip-box {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--layout-scale) * 0.2);
+    background: linear-gradient(180deg, #fff, #f7faf0);
+    padding: calc(var(--layout-scale) * 0.12);
+    border-radius: 0.75rem;
+    border: 1px solid rgba(31,61,15,0.06);
+}
+
+.score-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 4rem;
+}
+
+.team-label {
+    font-size: 0.75rem;
+    color: rgb(27 45 16 / 78%);
+    margin-bottom: calc(var(--layout-scale) * 0.06);
+    text-align: center;
+    max-width: 8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vs-sep {
+    font-weight: 700;
+    color: rgb(70 109 29 / 88%);
+    padding: 0 0.4rem;
+}
+
+.tip-badge {
+    display: inline-block;
+    background: #e9f6e6;
+    color: #1f3d0f;
+    border: 1px solid rgba(31,61,15,0.06);
+    padding: 0.15rem 0.4rem;
+    border-radius: 999px;
+    font-weight: 700;
+    margin-left: 0.35rem;
+    font-size: 0.85rem;
+}
+
+.tip-input {
+    width: 5.2rem;
+    min-width: 4.2rem;
+    padding: calc(var(--layout-scale) * 0.14);
+    border: 1px solid rgba(31,61,15,0.12);
+    border-radius: 0.5rem;
+    background: #ffffff;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.03);
+    text-align: center;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.tip-input:focus {
+    outline: none;
+    border-color: #2b5a1e;
+    box-shadow: 0 8px 18px rgba(43,90,30,0.12);
+    transform: translateY(-1px);
+}
+
+.tip-submit {
+    padding: calc(var(--layout-scale) * 0.18) calc(var(--layout-scale) * 0.6);
+    background: #1f3d0f;
+    color: #fff;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 700;
+    box-shadow: 0 6px 14px rgba(31,61,15,0.12);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+}
+
+.tip-submit:hover,
+.tip-submit:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(31,61,15,0.18);
+    background: #2b5a1e;
+    outline: none;
+}
+
+.tip-message {
+    font-size: calc(var(--layout-scale) * 0.12);
+    color: rgb(27 45 16 / 72%);
+}
+
+.tip-summary {
+    font-weight: 600;
+    color: rgb(27 45 16 / 86%);
+}
+
+.schedule-match-card.is-expanded {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgb(27 45 16 / 12%);
+}
+
+/* Make match cards clearly interactive */
+.schedule-match-card {
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.schedule-match-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 36px rgb(27 45 16 / 14%);
+}
+
+.schedule-match-card .tip-toggle {
+    margin-left: 0.5rem;
+    background: transparent;
+    border: 1px solid rgb(31 61 15 / 10%);
+    padding: calc(var(--layout-scale) * 0.08) calc(var(--layout-scale) * 0.18);
+    border-radius: 30rem;
+    color: #1f3d0f;
+    font-weight: 700;
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+    cursor: pointer;
+}
+
+.schedule-match-card .tip-toggle i {
+    font-size: 0.95em;
+}
+
+/* Prevent pointer cursor on interactive controls inside card */
+.schedule-match-card a,
+.schedule-match-card button,
+.schedule-match-card input {
+    cursor: default;
+}
+
 .schedule-empty-state {
     padding: calc(var(--layout-scale) * 0.3);
     border: 1px dashed rgb(31 61 15 / 18%);
@@ -283,5 +433,10 @@
 
     .schedule-match-card__score {
         justify-self: start;
+    }
+
+    .tip-input {
+        width: 100%;
+        box-sizing: border-box;
     }
 }
