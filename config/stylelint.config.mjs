@@ -7,6 +7,7 @@ export default {
     "rule-empty-line-before": null,
     "declaration-empty-line-before": null,
     "custom-property-empty-line-before": null,
-    "declaration-block-single-line-max-declarations": null
+    "declaration-block-single-line-max-declarations": null,
+    "selector-class-pattern": null
   }
 };
