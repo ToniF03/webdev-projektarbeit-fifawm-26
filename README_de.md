@@ -180,7 +180,6 @@ Dieses Projekt demonstriert die praktische Anwendung von:
 ## Autoren
 
 * Toni Fey
-* [Finn Konrad](https://www.google.com)
 
 ---
 
