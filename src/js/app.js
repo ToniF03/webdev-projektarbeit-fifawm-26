@@ -11,7 +11,9 @@ const finaleTimestamp = 1784487600;
 const newsAPI = "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/news";
 const teamsAPI = "https://worldcup26.ir/get/teams";
 const gamesAPI = "https://worldcup26.ir/get/games";
+const stadiumsAPI = "https://worldcup26.ir/get/stadiums";
 const newsBaseURL = "https://www.espn.com/soccer/story/_/id/";
+const displayedMatches = 3;
 
 const [daysEl, hoursEl, minutesEl, secondsEl] = [
     'countdownCardDays',
@@ -68,6 +70,7 @@ let ongoingGames = [];
 let futureGames = [];
 
 let teamsData = [];
+let stadiumsData = [];
 
 async function getGameData() {
     let gameData = await fetchFromURL(gamesAPI);
@@ -83,16 +86,17 @@ async function getGameData() {
     gameData["games"].forEach(element => {
         if (!element["home_team_name_en"] || !element["away_team_name_en"])
             return;
-        if (element["time_elapsed"] == "notstarted") {
+        if (element["time_elapsed"].toLowerCase() == "notstarted") {
             futureGames[futureGamesCount] = element;
             futureGamesCount++;
         }
-        else if (element["time_elapsed"] == "finished") {
+        else if (element["time_elapsed"].toLowerCase() == "finished") {
             finishedGames[finishedGamesCount] = element;
             finishedGamesCount++;
         }
         else {
-            ongoingGames[ongoingGamesCount]
+            ongoingGames[ongoingGamesCount] = element;
+            ongoingGamesCount++;
         }
     });
 
@@ -100,10 +104,85 @@ async function getGameData() {
     console.log("Amount of ongoing games: " + String(ongoingGamesCount));
     console.log("Amount of future games: " + String(futureGamesCount));
     console.log(finishedGames);
+    console.log(ongoingGames);
     console.log(futureGames);
 
     teamsData = await fetchFromURL(teamsAPI);
-    console.log(teamsData);
+    teamsData.teams.sort((a, b) => a.id - b.id);
+
+    stadiumsData = await fetchFromURL(stadiumsAPI);
+    stadiumsData.stadiums.sort((a, b) => a.id - b.id);
+
+    buildFollowingGamesCards();
+}
+
+function buildFollowingGamesCards() {
+    const upcomingMatchesContainer = document.getElementById('upcomingMatchesContainer');
+
+    if (futureGames.length == 0) upcomingMatchesContainer.classList.add('hide');
+    
+    for(let i = 0; i < displayedMatches; i++) {
+        let match = futureGames[i];
+        let homeTeam = teamsData["teams"][match["home_team_id"] - 1];
+        let awayTeam = teamsData["teams"][match["away_team_id"] - 1];
+        let stadium = stadiumsData["stadiums"][match["stadium_id"] - 1];
+
+        let matchCard = document.createElement('article');
+        matchCard.classList.add('card');
+        matchCard.classList.add('grid');
+        matchCard.classList.add('grid2c');
+
+        let homeTeamFlag = document.createElement('img');
+        homeTeamFlag.alt = match["home_team_name_en"];
+        homeTeamFlag.src = homeTeam.flag;
+        homeTeamFlag.title = match["home_team_name_en"];
+        homeTeamFlag.classList.add("flag");
+        
+        let awayTeamFlag = document.createElement('img');
+        awayTeamFlag.alt = match["away_team_name_en"];
+        awayTeamFlag.src = awayTeam.flag;
+        awayTeamFlag.title = match["away_team_name_en"];
+        awayTeamFlag.classList.add("flag");
+        awayTeamFlag.classList.add("justify-self-right");
+
+        let homeTeamName = document.createElement('h4');
+        homeTeamName.textContent = match["home_team_name_en"];
+        
+        let awayTeamName = document.createElement('h4');
+        awayTeamName.textContent = match["away_team_name_en"];
+        awayTeamName.classList.add('tr');
+
+        let gameTime = document.createElement('a');
+        let gameTimeIcon = document.createElement('i');
+        gameTimeIcon.classList.add('fa');
+        gameTimeIcon.classList.add('fa-calendar');
+        gameTime.append(gameTimeIcon);
+        
+        let timeDifference = 0;
+        
+        if (match['stadium_id'] < 4)
+            timeDifference = 6
+        else if (match['stadium_id'] < 7)
+            timeDifference = 5
+        else if (match['stadium_id'] < 13)
+            timeDifference = 4
+        else
+            timeDifference = 7
+        
+        const d = new Date(match["local_date"] + " GMT-0" + String(timeDifference) + "00");
+        gameTime.append(" " + d.toLocaleString("en-US"));
+
+        let gameLocation = document.createElement('a');
+        let gameLocationIcon = document.createElement('i');
+        gameLocationIcon.classList.add('fa');
+        gameLocationIcon.classList.add('fa-location-dot');
+        gameLocation.append(gameLocationIcon);
+        gameLocation.append(" " + stadium.fifa_name + ", " + stadium.city_en + ", " + stadium.country_en);
+        gameLocation.classList.add("tr");
+        
+        matchCard.append(homeTeamFlag, awayTeamFlag, homeTeamName, awayTeamName, gameTime, gameLocation);
+        upcomingMatchesContainer.append(matchCard);
+    }
 }
 
 /// Fetches the current news to the World Cup 2026 from www.espn.com. And adds them to the newsContainer.
@@ -113,9 +192,8 @@ async function getNews() {
         console.error("Could not fetch news data")
         return;
     }
-    console.log(newsData);
 
-    let newsContainer = document.getElementById("newsContainer");
+    const newsContainer = document.getElementById("newsContainer");
 
     for (let i = 0; i < 2; i++) {
         let article = newsData['articles'][i];

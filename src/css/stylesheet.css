@@ -89,6 +89,10 @@ h4 {
     ;
 }
 
+.justify-self-right {
+    justify-self: right;
+}
+
 .ml-auto {
     margin-left: auto;
 }
@@ -142,11 +146,11 @@ h4 {
 }
 
 .tr {
-    text-align: right;
+    text-align: right !important;
 }
 
 .tc {
-    text-align: center;
+    text-align: center !important;
 }
 
 .py-0 {
@@ -325,7 +329,9 @@ nav .tab:focus-visible {
     padding-right: 0;
 }
 
-.card--news>h4,p,a {
+.card--news>h4,
+.card--news>p,
+.card--news>a {
     padding-left: calc(var(--layout-scale) * 0.5);
     padding-right: calc(var(--layout-scale) * 0.5);
     margin-bottom: calc(var(--layout-scale) * 0.2);
@@ -367,10 +373,11 @@ nav .tab:focus-visible {
 }
 
 .flag {
-    height: 1.5rem;
-    width: 2.5rem;
+    height: calc(var(--layout-scale) * 0.375);
+    width: calc(var(--layout-scale) * 0.625);
     object-fit: contain;
-    margin-left: 0.75em;
+    margin-left: calc(var(--layout-scale) * 0.1);
+    margin-right: calc(var(--layout-scale) * 0.1);
 }
 
 .no-shadow {
@@ -379,6 +386,10 @@ nav .tab:focus-visible {
 
 .mb-0 {
     margin-bottom: 0 !important;
+}
+
+.grid-span-full {
+    grid-column: 1 / -1;
 }
 
 .hide {
@@ -405,8 +416,27 @@ nav .tab:focus-visible {
     margin: calc(var(--layout-scale) * 0.5);
 }
 
+#live-circle {
+    color: red;
+    animation: pulse 2s infinite;
+}
 
-/* Tablet */
+@keyframes pulse {
+    0% {
+        transform: scale(80%);
+    }
+
+    50% {
+        transform: scale(90%);
+    }
+
+    100% {
+        transform: scale(80%);
+    }
+}
+
+
+/* Desktop */
 @media (width >=1000px) {
     :root {
         --layout-scale-base: 4rem;
@@ -418,8 +448,8 @@ nav .tab:focus-visible {
     }
 }
 
-/* Phone */
-@media (600px <=width < 1000px) {
+/* Tablet */
+@media (795px <=width < 1270px) {
     :root {
         --layout-scale-base: 3rem;
     }
