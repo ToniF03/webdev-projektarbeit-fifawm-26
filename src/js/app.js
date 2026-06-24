@@ -278,8 +278,8 @@ function getMatchScoreText(match) {
     if (status == "notstarted")
         return "VS";
 
-    const homeScore = match["home_team_score"];
-    const awayScore = match["away_team_score"];
+    const homeScore = match["home_score"] ?? match["home_team_score"];
+    const awayScore = match["away_score"] ?? match["away_team_score"];
 
     if (homeScore == null || awayScore == null)
         return "-";
@@ -339,7 +339,7 @@ function createScheduleMatchCard(match) {
 
     let score = document.createElement('div');
     score.classList.add('schedule-match-card__score');
-    score.textContent = getMatchScoreText(match);
+    score.textContent = status == "finished" ? `Endstand ${getMatchScoreText(match)}` : getMatchScoreText(match);
 
     let awayBlock = document.createElement('div');
     awayBlock.classList.add('schedule-match-card__team', 'schedule-match-card__team--away');
