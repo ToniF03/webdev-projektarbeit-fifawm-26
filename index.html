@@ -49,19 +49,35 @@
                 <h1 class="slider-title">FIFA<br>WORLD CUP<br>2026</h1>
                 <span>48 NATIONEN. 3 GASTGEBERLÄNDER. EIN TRAUM.</span>
                 <div class="slider-actions">
-                    <a class="slider-btn" href="src/html/spielplan.html">SPIELPLAN ANSEHEN <i class="fa fa-chevron-right"></i></a>
-                    <a class="slider-btn slider-btn-secondary">TEAMS ENTDECKEN</a>
+                    <a class="slider-btn" href="src/html/spielplan.html">SPIELPLAN ANSEHEN <i
+                            class="fa fa-chevron-right"></i></a>
+                    <a class="slider-btn slider-btn-secondary">LIVETICKER ANSEHEN</a>
                 </div>
             </div>
         </figure>
     </div>
 
-    <article class="card content" id="newsContainer">
+    <article class="card content">
         <h4>AKTUELLE NEWS</h4>
+        <div id="newsContainer"></div>
+        <a href="./src/html/newsPage.html">Mehr lesen <i class="fa fa-chevron-right"></i></a>
     </article>
 
     <article class="card content">
         <h4>FAN-ZONE</h4>
+        <div class="fan-zone-grid">
+            <div class="card card--interactive no-shadow fan-card">
+                <h5>Tippen &amp; Spaß haben</h5>
+                <p>Schaue dir den Spielplan und tippe, was du denkst, wie die Teams spielen werden.</p>
+                <a class="btn" href="src/html/spielplan.html">Termine anzeigen <i class="fa fa-chevron-right"></i></a>
+            </div>
+
+            <div class="card card--interactive no-shadow fan-card">
+                <h5>Neu &amp; informiert</h5>
+                <p>Lies die neusten Nachrichten rund um die WM 2026 bereitgestellt durch <a href="https://www.espn.com/">ESPN</a></p>
+                <a class="btn" href="src/html/newsPage.html">Jetzt lesen <i class="fa fa-chevron-right"></i></a>
+            </div>
+        </div>
     </article>
 
     <article class="card content" id="countdownCard">
@@ -95,7 +111,7 @@
         <p><i class="fa fa-location-dot"></i> MetLife Stadium, New Jersey</p>
 
 
-        <a href="#">ZUM SPIELPLAN <i class="fa fa-chevron-right"></i></a>
+        <a href="./src/html/spielplan.html">ZUM SPIELPLAN <i class="fa fa-chevron-right"></i></a>
     </article>
 
     <article class="card content">
@@ -189,11 +205,10 @@
             </div>
 
         </div>
-        <a href="#">MEHR STATISTIKEN <i class="fa fa-chevron-right"></i></a>
     </article>
 
     <section class="card content" id="upcomingMatchesContainer">
-        <h4>FOLLOWING MATCHES</h4>
+        <h4>Bevorstehende Spiele</h4>
     </section>
 
     <footer class="footer">
@@ -206,16 +221,6 @@
                     <li><a href="src/html/spielplan.html">Spielplan</a></li>
                     <li><a href="src/html/newsPage.html">News</a></li>
                     <li><a href="#">Liveticker</a></li>
-                </ul>
-            </section>
-
-            <section>
-                <h4>TURNIER</h4>
-                <ul class="footer-list">
-                    <li><a href="#">Gruppen</a></li>
-                    <li><a href="#">Teams</a></li>
-                    <li><a href="#">Stadien</a></li>
-                    <li><a href="#">Statistiken</a></li>
                 </ul>
             </section>
 
