@@ -331,9 +331,7 @@ function createScheduleMatchCard(match) {
     let homeName = document.createElement('div');
     let homeTitle = document.createElement('h4');
     homeTitle.textContent = match["home_team_name_en"];
-    let homeSubtitle = document.createElement('p');
-    homeSubtitle.textContent = 'Heimteam';
-    homeName.append(homeTitle, homeSubtitle);
+    homeName.append(homeTitle);
 
     homeBlock.append(homeFlag, homeName);
 
@@ -347,9 +345,7 @@ function createScheduleMatchCard(match) {
     let awayName = document.createElement('div');
     let awayTitle = document.createElement('h4');
     awayTitle.textContent = match["away_team_name_en"];
-    let awaySubtitle = document.createElement('p');
-    awaySubtitle.textContent = 'Gastteam';
-    awayName.append(awayTitle, awaySubtitle);
+    awayName.append(awayTitle);
 
     let awayFlag = document.createElement('img');
     awayFlag.alt = match["away_team_name_en"];
