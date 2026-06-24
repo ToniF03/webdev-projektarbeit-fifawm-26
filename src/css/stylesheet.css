@@ -158,6 +158,14 @@ h4 {
     padding-top: calc(var(--layout-scale) * 0.125) !important;
 }
 
+.p-1 {
+    padding: calc(var(--layout-scale) * 0.25) !important;
+}
+
+.gap-1 {
+    gap: calc(var(--layout-scale) * 0.25) !important;
+}
+
 /* Topbar */
 nav {
     grid-column: 1 / -1;

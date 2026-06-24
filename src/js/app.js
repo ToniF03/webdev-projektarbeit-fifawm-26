@@ -477,14 +477,26 @@ async function getNews() {
     if (!newsContainer)
         return;
 
-    let newsData = await fetchFromURL(API_LINKS.NEWS_API);
+    // If we are on the dedicated news page, request more items from the API.
+    let newsApiUrl = API_LINKS.NEWS_API;
+    const onNewsPage = String(window.location.pathname || '').includes('newsPage.html');
+    if (onNewsPage) {
+        newsApiUrl += (newsApiUrl.includes('?') ? '&' : '?') + 'limit=50';
+    }
+
+    let newsData = await fetchFromURL(newsApiUrl);
     if (newsData == null) {
         console.error("Could not fetch news data")
         return;
     }
 
-    for (let i = 0; i < 2; i++) {
-        let article = newsData['articles'][i];
+    let articles = newsData['articles'] || [];
+    // Show more articles on the news page (up to 50), otherwise keep a reasonable default.
+    const maxDefault = onNewsPage ? 50 : 12;
+    const maxArticles = Math.min(maxDefault, articles.length);
+
+    for (let i = 0; i < maxArticles; i++) {
+        let article = articles[i];
         if (!article)
             break;
 
@@ -494,8 +506,9 @@ async function getNews() {
         newsCard.classList.add("card--interactive");
 
         let newsImage = document.createElement('img');
-        newsImage.alt = article['images'][0]['alt'];
-        newsImage.src = article['images'][0]['url'];
+        newsImage.alt = article?.['images']?.[0]?.['alt'] || '';
+        newsImage.src = article?.['images']?.[0]?.['url'] || '';
+        newsImage.loading = 'lazy';
 
         let newsHeader = document.createElement('h4');
         newsHeader.textContent = article['headline'];
