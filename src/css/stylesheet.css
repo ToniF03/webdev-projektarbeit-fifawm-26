@@ -123,24 +123,22 @@ h4 {
     display: grid;
 }
 
-.grid4c {
+.grid-cols-4 {
     grid-template-columns: repeat(4, auto);
     text-align: center;
     align-items: center;
     justify-content: center;
 }
 
-.grid3c {
+.grid-cols-3 {
     grid-template-columns: repeat(3, auto);
 }
 
-.grid2c {
+.grid-cols-2 {
     grid-template-columns: repeat(2, auto);
 }
 
-.grid2c2r {
-    display: grid;
-    grid-template-columns: auto auto;
+.grid-rows-2 {
     grid-template-rows: auto auto;
     gap: calc(var(--layout-scale) * 0.25);
 }

@@ -9,9 +9,10 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.2.1/css/all.css">
 
     <!-- SEO -->
-    <title>Title</title>
-    <meta name="keywords" content="Keywords">
-    <meta name="description" content="Description">
+    <title>FIFA WM 2026 - Spielplan, Teams, Stadien und News</title>
+    <meta name="keywords" content="WM 2026, FIFA World Cup 2026, Spielplan, Gruppen, Teams, Stadien">
+    <meta name="description"
+        content="Alle Informationen zur FIFA Weltmeisterschaft 2026. Spielplan, Gruppen, Teams, Stadien, Liveticker und aktuelle News.">
     <meta name="author" content="Author">
 
     <!-- Open Graph -->
@@ -26,11 +27,11 @@
     <script src="src/js/app.js" type="module" defer></script>
 
     <!-- Multimedia -->
-    <link rel="icon" type="image/svg" href="src/assets/favicon.png">
+    <link rel="icon" type="image/png" href="src/assets/favicon.png">
 </head>
 
 <body class="grid">
-    <nav class="topbar">
+    <nav class="topbar" aria-label="Hauptnavigation">
         <ul class="topbar-menu">
             <li><a class="topbar-title"><img class="topbar-icon" src="src/assets/favicon.png"
                         alt="WM2026 Icon">WM2026</a></li>
@@ -43,30 +44,30 @@
 
     <div class="slider">
         <figure>
-            <img src="src/assets/banner.png" alt="WM 2026 Slider Picture">
+            <img src="src/assets/banner.png" alt="Banner der FIFA Weltmeisterschaft 2026">
             <div class="slider-overlay">
-                <a class="slider-title">FIFA<br>WORLD CUP<br>2026</a>
-                <a>48 NATIONEN. 3 GASTGEBERLÄNDER. EIN TRAUM.</a>
+                <h1 class="slider-title">FIFA<br>WORLD CUP<br>2026</h1>
+                <span>48 NATIONEN. 3 GASTGEBERLÄNDER. EIN TRAUM.</span>
                 <div class="slider-actions">
-                    <button class="slider-btn">SPIELPLAN ANSEHEN <i class="fa fa-chevron-right"></i></button>
-                    <button class="slider-btn slider-btn-secondary">TEAMS ENTDECKEN</button>
+                    <a class="slider-btn">SPIELPLAN ANSEHEN <i class="fa fa-chevron-right"></i></a>
+                    <a class="slider-btn slider-btn-secondary">TEAMS ENTDECKEN</a>
                 </div>
             </div>
         </figure>
     </div>
 
-    <article class="card content grid-span-full hide">
-        <a class="tr"><i class="fa fa-circle" id="live-circle"></i> '01:02</a>
-        <div class="grid grid2c">
+    <section aria-label="Live-Spiel" class="card content grid-span-full hide">
+        <span class="tr"><i class="fa fa-circle" id="live-circle"></i> '01:02</span>
+        <div class="grid grid-cols-2">
             <h4>Spain</h4>
             <h4 class="tr">Saudi Arabia</h4>
         </div>
-        <div class="grid grid3c">
+        <div class="grid grid-cols-3">
             <h4 class="tr">3</h4>
             <h4 class="tc">-</h4>
             <h4>0</h4>
         </div>
-    </article>
+    </section>
 
     <article class="card content">
         <h4>DIE GASTGEBERLÄNDER</h4>
@@ -79,7 +80,8 @@
                         <p>Modernste Stadien und Rekordzuschauerzahlen.</p>
                     </section>
                 </div>
-                <img class="banner" src="src/assets/usnyc-banner.png" alt="New Yorks landscape">
+                <img class="banner" src="src/assets/usnyc-banner.png"
+                    alt="Skyline von New York, Austragungsort der WM 2026">
             </div>
 
             <div class="card card--interactive no-shadow card--host">
@@ -119,26 +121,26 @@
     <article class="card content" id="countdownCard">
         <h4>COUNTDOWN ZUM FINALE</h4>
 
-        <div class="grid2c2r">
+        <div class="grid grid-cols-2 grid-rows-2">
 
             <section class="card mb-0 tc">
                 <h4 id="countdownCardDays">--</h4>
-                <p>days</p>
+                <p>Tage</p>
             </section>
 
             <section class="card mb-0 tc">
                 <h4 id="countdownCardHours">--</h4>
-                <p>hours</p>
+                <p>Stunden</p>
             </section>
 
             <section class="card tc">
                 <h4 id="countdownCardMinutes">--</h4>
-                <p>minutes</p>
+                <p>Minuten</p>
             </section>
 
             <section class="card tc">
                 <h4 id="countdownCardSeconds">--</h4>
-                <p>seconds</p>
+                <p>Sekunden</p>
             </section>
         </div>
 
@@ -150,133 +152,55 @@
         <a href="#">ZUM SPIELPLAN <i class="fa fa-chevron-right"></i></a>
     </article>
 
+    <!-- CREATE THIS DYNAMICALLY -->
     <article class="card content">
         <h4>GRUPPENPHASE</h4>
-        <div class="card card--interactive no-shadow mb-0 flex py-0">
-            <a>GRUPPE A</a>
-            <div class="grid grid4c mr-auto ml-auto">
-                <img class="flag" src="https://flagcdn.com/w80/mx.png" title="Mexico" alt="Mexico">
-                <img class="flag" src="https://flagcdn.com/w80/kr.png" title="South Korea" alt="South Korea">
-                <img class="flag" src="https://flagcdn.com/w80/cz.png" title="Czechia" alt="Czechia">
-                <img class="flag" src="https://flagcdn.com/w80/za.png" title="Southafrica" alt="South Africa">
-            </div>
-            <a><i class="fa fa-chevron-right"></i></a>
-        </div>
-        <div class="card card--interactive no-shadow mb-0 flex py-0">
-            <a>GRUPPE B</a>
-            <div class="grid grid4c mr-auto ml-auto">
-                <img class="flag" src="https://flagcdn.com/w80/ch.png" title="Switzerland" alt="Switzerland">
-                <img class="flag" src="https://flagcdn.com/w80/ca.png" title="Canada" alt="Canada">
-                <img class="flag" src="https://flagcdn.com/w80/qa.png" title="Qatar" alt="Qatar">
-                <img class="flag" src="https://flagcdn.com/w80/ba.png" title="Bosnia and Herzegovina"
-                    alt="Bosnia and Herzegovina">
-            </div>
-            <a><i class="fa fa-chevron-right"></i></a>
-        </div>
-        <div class="card card--interactive no-shadow mb-0 flex py-0">
-            <a>GRUPPE C</a>
-            <div class="grid grid4c mr-auto ml-auto">
-                <img class="flag" src="https://flagcdn.com/w80/gb-sct.png" title="Scotland" alt="Scotland">
-                <img class="flag" src="https://flagcdn.com/w80/ma.png" title="Morocco" alt="Morocco">
-                <img class="flag" src="https://flagcdn.com/w80/br.png" title="Brazil" alt="Brazil">
-                <img class="flag" src="https://flagcdn.com/w80/ht.png" title="Haiti" alt="Haiti">
-            </div>
-            <a><i class="fa fa-chevron-right"></i></a>
-        </div>
-        <div class="card card--interactive no-shadow mb-0 flex py-0">
-            <a>GRUPPE D</a>
-            <div class="grid grid4c mr-auto ml-auto">
-                <img class="flag" src="https://flagcdn.com/w80/us.png" title="USA" alt="USA">
-                <img class="flag" src="https://flagcdn.com/w80/au.png" title="Australia" alt="Australia">
-                <img class="flag" src="https://flagcdn.com/w80/tr.png" title="Türkiye" alt="Türkiye">
-                <img class="flag" src="https://flagcdn.com/w80/py.png" title="Paraguay" alt="Paraguay">
-            </div>
-            <a><i class="fa fa-chevron-right"></i></a>
-        </div>
-        <div class="card card--interactive no-shadow mb-0 flex py-0">
-            <a>GRUPPE E</a>
-            <div class="grid grid4c mr-auto ml-auto">
-                <img class="flag" src="https://flagcdn.com/w80/de.png" title="Germany" alt="Germany">
-                <img class="flag" src="https://flagcdn.com/w80/ci.png" title="Ivory Coast" alt="Ivory Coast">
-                <img class="flag" src="https://flagcdn.com/w80/ec.png" title="Ecuador" alt="Ecuador">
-                <img class="flag" src="https://flagcdn.com/w80/cw.png" title="Curacao" alt="Curacao">
-            </div>
-            <a><i class="fa fa-chevron-right"></i></a>
-        </div>
-        <div class="card card--interactive no-shadow mb-0 flex py-0">
-            <a>GRUPPE F</a>
-            <div class="grid grid4c mr-auto ml-auto">
-                <img class="flag" src="https://flagcdn.com/w80/se.png" title="Sweden" alt="Sweden">
-                <img class="flag" src="https://flagcdn.com/w80/jp.png" title="Japan" alt="Japan">
-                <img class="flag" src="https://flagcdn.com/w80/nl.png" title="Netherlands" alt="Netherlands">
-                <img class="flag" src="https://flagcdn.com/w80/tn.png" title="Tunisia" alt="Tunisia">
-            </div>
-            <a><i class="fa fa-chevron-right"></i></a>
-        </div>
-        <div class="card card--interactive no-shadow mb-0 flex py-0">
-            <a>GRUPPE G</a>
-            <div class="grid grid4c mr-auto ml-auto">
-                <img class="flag" src="https://flagcdn.com/w80/be.png" title="Belgium" alt="Belgium">
-                <img class="flag" src="https://flagcdn.com/w80/eg.png" title="Egypt" alt="Egypt">
-                <img class="flag" src="https://flagcdn.com/w80/ir.png" title="Iran" alt="Iran">
-                <img class="flag" src="https://flagcdn.com/w80/nz.png" title="New Zealand" alt="New Zealand">
-            </div>
-            <a><i class="fa fa-chevron-right"></i></a>
-        </div>
-        <div class="card card--interactive no-shadow flex py-0">
-            <a>GRUPPE H</a>
-            <div class="grid grid4c mr-auto ml-auto">
-                <img class="flag" src="https://flagcdn.com/w80/uy.png" title="Uruguay" alt="Uruguay">
-                <img class="flag" src="https://flagcdn.com/w80/sa.png" title="Saudi Arabia" alt="Saudi Arabia">
-                <img class="flag" src="https://flagcdn.com/w80/es.png" title="Spain" alt="Spain">
-                <img class="flag" src="https://flagcdn.com/w80/cv.png" title="Cabo Verde" alt="Cabo Verde">
-            </div>
-            <a><i class="fa fa-chevron-right"></i></a>
+        <div id="groupContainer">
         </div>
         <a href="#">ALLE GRUPPEN <i class=" fa fa-chevron-right"></i></a>
     </article>
 
     <article class="card content">
         <h4>TURNIER IN ZAHLEN</h4>
-        <div class="grid grid2c2r">
+        <div class="grid grid-cols-2 grid-rows-2">
 
             <div class="card mb-0">
-                <div class="grid grid2c">
+                <div class="grid grid-cols-2">
                     <i class="fa fa-users align-self-center fs-2"></i>
-                    <section>
+                    <div>
                         <h4 class="tc">48</h4>
                         <p class="tc">Teams</p>
-                    </section>
+                    </div>
                 </div>
             </div>
 
             <div class="card mb-0">
-                <div class="grid grid2c">
+                <div class="grid grid-cols-2">
                     <i class="fa-solid fa-futbol align-self-center fs-2"></i>
-                    <section>
+                    <div>
                         <h4 class="tc">104</h4>
                         <p class="tc">Spiele</p>
-                    </section>
+                    </div>
                 </div>
             </div>
 
             <div class="card mb-0">
-                <div class="grid grid2c">
+                <div class="grid grid-cols-2">
                     <i class="fa fa-location-dot align-self-center fs-2"></i>
-                    <section>
+                    <div>
                         <h4 class="tc">16</h4>
                         <p class="tc">Stadien</p>
-                    </section>
+                    </div>
                 </div>
             </div>
 
             <div class="card mb-0">
-                <div class="grid grid2c">
+                <div class="grid grid-cols-2">
                     <i class="fa fa-calendar align-self-center fs-2"></i>
-                    <section>
+                    <div>
                         <p class="tc">Juni - Juli</p>
                         <h4 class="tc">2026</h4>
-                    </section>
+                    </div>
                 </div>
             </div>
 
@@ -289,7 +213,7 @@
     </article>
 
     <section class="card content" id="upcomingMatchesContainer">
-        <h4>FOLLOWING MATCHES</h4>    
+        <h4>FOLLOWING MATCHES</h4>
     </section>
 </body>
 

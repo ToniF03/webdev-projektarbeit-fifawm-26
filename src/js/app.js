@@ -8,6 +8,7 @@
 import { TIME_CALCULATIONS, API_LINKS, FINALE_TIMESTAMP } from './lib/utility/constants.js';
 
 const displayedMatches = 3;
+const displayedGroups = 5;
 
 const [daysEl, hoursEl, minutesEl, secondsEl] = [
     'countdownCardDays',
@@ -15,6 +16,13 @@ const [daysEl, hoursEl, minutesEl, secondsEl] = [
     'countdownCardMinutes',
     'countdownCardSeconds'
 ].map(id => document.getElementById(id));
+
+let finishedGames = [];
+let ongoingGames = [];
+let futureGames = [];
+
+let teamsData = [];
+let stadiumsData = [];
 
 /// A function to automatically calculate the time difference between now and the finale
 /// of the 2026 World Cup and displaying it. Also hides the whole card when we are past this
@@ -59,13 +67,6 @@ async function fetchFromURL(url) {
     }
 }
 
-let finishedGames = [];
-let ongoingGames = [];
-let futureGames = [];
-
-let teamsData = [];
-let stadiumsData = [];
-
 async function getGameData() {
     let gameData = await fetchFromURL(API_LINKS.GAMES_API);
     if (gameData == null) {
@@ -97,18 +98,70 @@ async function getGameData() {
     teamsData = await fetchFromURL(API_LINKS.TEAMS_API);
     teamsData.teams.sort((a, b) => a.id - b.id);
 
-    stadiumsData = await fetchFromURL(API_LINKS.STADIUMS_API); 
+    stadiumsData = await fetchFromURL(API_LINKS.STADIUMS_API);
     stadiumsData.stadiums.sort((a, b) => a.id - b.id);
 
     buildFollowingGamesCards();
+    buildGroupCards();
+}
+
+function buildGroupCards() {
+    let groupContainer = document.getElementById("groupContainer");
+
+    let sortedGroups = [];
+
+    sortedGroups = teamsData.teams.reduce((groups, team) => {
+        const group = team.groups;
+
+        if (!groups[group]) {
+            groups[group] = [];
+        }
+
+        groups[group].push(team);
+
+        return groups;
+    }, {});
+
+    console.log(sortedGroups);
+
+    for (let i = 0; i < displayedGroups; i++) {
+        let groupCard = document.createElement('div');
+        const group = sortedGroups[String.fromCharCode(65 + i)];
+        groupCard.classList.add("card", "card--interactive", "no-shadow", "flex", "py-0");
+
+        if (i < displayedGroups - 1)
+            groupCard.classList.add("mb-0");
+
+        let groupName = document.createElement("span");
+        groupName.textContent = "GRUPPE " + group[0]["groups"];
+
+        let groupFlagContainer = document.createElement("div");
+        groupFlagContainer.classList.add("grid", "grid-cols-4", "mr-auto", "ml-auto");
+
+        for (let flagIndex = 0; flagIndex < 4; flagIndex++) {
+            let flag = document.createElement("img");
+            flag.alt = group[flagIndex].name_en;
+            flag.title = group[flagIndex].name_en;
+            flag.src = group[flagIndex].flag;
+            flag.classList.add("flag");
+            
+            groupFlagContainer.append(flag);
+        }
+
+        let chevron = document.createElement("i");
+        chevron.classList.add("fa", "fa-chevron-right");
+
+        groupCard.append(groupName, groupFlagContainer, chevron);
+        groupContainer.append(groupCard);
+    }
 }
 
 function buildFollowingGamesCards() {
     const upcomingMatchesContainer = document.getElementById('upcomingMatchesContainer');
 
     if (futureGames.length == 0) upcomingMatchesContainer.classList.add('hide');
-    
-    for(let i = 0; i < displayedMatches; i++) {
+
+    for (let i = 0; i < displayedMatches; i++) {
         let match = futureGames[i];
         let homeTeam = teamsData["teams"][match["home_team_id"] - 1];
         let awayTeam = teamsData["teams"][match["away_team_id"] - 1];
@@ -117,24 +170,26 @@ function buildFollowingGamesCards() {
         let matchCard = document.createElement('article');
         matchCard.classList.add('card');
         matchCard.classList.add('grid');
-        matchCard.classList.add('grid2c');
+        matchCard.classList.add('grid-cols-2');
 
         let homeTeamFlag = document.createElement('img');
         homeTeamFlag.alt = match["home_team_name_en"];
         homeTeamFlag.src = homeTeam.flag;
         homeTeamFlag.title = match["home_team_name_en"];
+        homeTeamFlag.loading = "lazy";
         homeTeamFlag.classList.add("flag");
-        
+
         let awayTeamFlag = document.createElement('img');
         awayTeamFlag.alt = match["away_team_name_en"];
         awayTeamFlag.src = awayTeam.flag;
         awayTeamFlag.title = match["away_team_name_en"];
+        awayTeamFlag.loading = "lazy";
         awayTeamFlag.classList.add("flag");
         awayTeamFlag.classList.add("justify-self-right");
 
         let homeTeamName = document.createElement('h4');
         homeTeamName.textContent = match["home_team_name_en"];
-        
+
         let awayTeamName = document.createElement('h4');
         awayTeamName.textContent = match["away_team_name_en"];
         awayTeamName.classList.add('tr');
@@ -144,9 +199,9 @@ function buildFollowingGamesCards() {
         gameTimeIcon.classList.add('fa');
         gameTimeIcon.classList.add('fa-calendar');
         gameTime.append(gameTimeIcon);
-        
+
         let timeDifference = 0;
-        
+
         if (match['stadium_id'] < 4)
             timeDifference = 6
         else if (match['stadium_id'] < 7)
@@ -155,7 +210,7 @@ function buildFollowingGamesCards() {
             timeDifference = 4
         else
             timeDifference = 7
-        
+
         const d = new Date(match["local_date"] + " GMT-0" + String(timeDifference) + "00");
         gameTime.append(" " + d.toLocaleString("en-US"));
 
@@ -166,7 +221,7 @@ function buildFollowingGamesCards() {
         gameLocation.append(gameLocationIcon);
         gameLocation.append(" " + stadium.fifa_name + ", " + stadium.city_en + ", " + stadium.country_en);
         gameLocation.classList.add("tr");
-        
+
         matchCard.append(homeTeamFlag, awayTeamFlag, homeTeamName, awayTeamName, gameTime, gameLocation);
         upcomingMatchesContainer.append(matchCard);
     }
