@@ -5,7 +5,7 @@
 * Description: Description
 */
 
-import { TIME_CALCULATIONS, API_LINKS, FINALE_TIMESTAMP } from './lib/utility/constants.js';
+import { TIME_CALCULATIONS, API_LINKS, FINALE_TIMESTAMP } from '../lib/utility/constants.js';
 
 const displayedMatches = 2;
 const displayedGroups = 5;

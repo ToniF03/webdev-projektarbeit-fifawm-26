@@ -1,4 +1,4 @@
-import { API_LINKS } from './lib/utility/constants.js';
+import { API_LINKS } from '../lib/utility/constants.js';
 
 const ticker = document.getElementById('liveTicker');
 
