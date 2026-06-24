@@ -20,3 +20,14 @@ export const TIME_CALCULATIONS = Object.freeze({
     HOUR_TO_SECONDS: 3600,
     MINUTE_TO_SECONDS: 60
 })
+
+export const FINALE_TIMESTAMP = Object.freeze({
+    FINALE_TIMESTAMP: 1784487600
+})
+
+export const API_LINKS = Object.freeze({
+    NEWS_API: "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/news",
+    TEAMS_API: "https://worldcup26.ir/get/teams",
+    GAMES_API: "https://worldcup26.ir/get/games",
+    STADIUMS_API: "https://worldcup26.ir/get/stadiums"
+})

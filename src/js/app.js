@@ -5,14 +5,8 @@
 * Description: Description
 */
 
-import { TIME_CALCULATIONS } from './lib/utility/constants.js';
+import { TIME_CALCULATIONS, API_LINKS, FINALE_TIMESTAMP } from './lib/utility/constants.js';
 
-const finaleTimestamp = 1784487600;
-const newsAPI = "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/news";
-const teamsAPI = "https://worldcup26.ir/get/teams";
-const gamesAPI = "https://worldcup26.ir/get/games";
-const stadiumsAPI = "https://worldcup26.ir/get/stadiums";
-const newsBaseURL = "https://www.espn.com/soccer/story/_/id/";
 const displayedMatches = 3;
 
 const [daysEl, hoursEl, minutesEl, secondsEl] = [
@@ -29,8 +23,8 @@ const [daysEl, hoursEl, minutesEl, secondsEl] = [
 function updateCountdown() {
     const now = Math.floor(Date.now() / TIME_CALCULATIONS.MILLISECONDS_TO_SECONDS);
     // Return false and end the function if the finale has already passed.
-    if (now > finaleTimestamp) return false;
-    let remaining = Math.max(0, finaleTimestamp - now);
+    if (now > FINALE_TIMESTAMP.FINALE_TIMESTAMP) return false;
+    let remaining = Math.max(0, FINALE_TIMESTAMP.FINALE_TIMESTAMP - now);
 
     daysEl.textContent = String(Math.floor(remaining / TIME_CALCULATIONS.DAY_TO_SECONDS));
     remaining %= TIME_CALCULATIONS.DAY_TO_SECONDS;
@@ -73,7 +67,7 @@ let teamsData = [];
 let stadiumsData = [];
 
 async function getGameData() {
-    let gameData = await fetchFromURL(gamesAPI);
+    let gameData = await fetchFromURL(API_LINKS.GAMES_API);
     if (gameData == null) {
         console.error("Could not fetch games data")
         return;
@@ -100,17 +94,10 @@ async function getGameData() {
         }
     });
 
-    console.log("Amount of finished games: " + String(finishedGamesCount));
-    console.log("Amount of ongoing games: " + String(ongoingGamesCount));
-    console.log("Amount of future games: " + String(futureGamesCount));
-    console.log(finishedGames);
-    console.log(ongoingGames);
-    console.log(futureGames);
-
-    teamsData = await fetchFromURL(teamsAPI);
+    teamsData = await fetchFromURL(API_LINKS.TEAMS_API);
     teamsData.teams.sort((a, b) => a.id - b.id);
 
-    stadiumsData = await fetchFromURL(stadiumsAPI);
+    stadiumsData = await fetchFromURL(API_LINKS.STADIUMS_API); 
     stadiumsData.stadiums.sort((a, b) => a.id - b.id);
 
     buildFollowingGamesCards();
@@ -187,7 +174,7 @@ function buildFollowingGamesCards() {
 
 /// Fetches the current news to the World Cup 2026 from www.espn.com. And adds them to the newsContainer.
 async function getNews() {
-    let newsData = await fetchFromURL(newsAPI);
+    let newsData = await fetchFromURL(API_LINKS.NEWS_API);
     if (newsData == null) {
         console.error("Could not fetch news data")
         return;
