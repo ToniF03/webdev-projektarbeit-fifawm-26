@@ -1,6 +1,6 @@
 /*
 * Created on: 2026-06-11
-* Author(s): Toni Fey, Finn Konrad, Tim Zingler
+* Author(s): Toni Fey
 * License: MIT
 * Description: Javascript file that contains all the constants.
 */
