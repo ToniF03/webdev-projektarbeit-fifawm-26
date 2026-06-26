@@ -156,6 +156,7 @@ function buildGroupCards() {
     if (!groupContainer)
         return;
 
+    // Build a lookup object like { A: [...], B: [...] } for easier rendering by group letter.
     let sortedGroups = teamsData.teams.reduce((groups, team) => {
         const group = team.groups;
 
@@ -254,6 +255,7 @@ function buildFollowingGamesCards() {
 
         let timeDifference;
 
+        // The API dates are local stadium times; this maps stadium ranges to UTC offsets.
         if (match['stadium_id'] < 4)
             timeDifference = 6
         else if (match['stadium_id'] < 7)
@@ -282,6 +284,7 @@ function buildFollowingGamesCards() {
 function getMatchDate(match) {
     let timeDifference;
 
+    // Keep the same stadium->timezone mapping in one helper for all schedule timestamps.
     if (match['stadium_id'] < 4)
         timeDifference = 6;
     else if (match['stadium_id'] < 7)
@@ -404,6 +407,7 @@ function createScheduleMatchCard(match) {
     matchCard.append(header, body, footer);
 
     // Tip panel (collapsed by default)
+    // Use API IDs when available; otherwise derive a stable fallback key for local tip storage.
     const matchId = match['id'] ?? match['match_id'] ?? `${match['home_team_id']}_${match['away_team_id']}_${match['local_date']}`;
     const tips = loadTips();
     const existingTip = tips[matchId];
@@ -486,6 +490,7 @@ function createScheduleMatchCard(match) {
                 msg.textContent = 'Bitte für beide Teams eine Zahl eingeben.';
                 return;
             }
+            // Persist tip with timestamp so later features (e.g. history/expiry) have context.
             const newTip = { home: h, away: a, timestamp: Date.now() };
             tips[matchId] = newTip;
             saveTips(tips);
@@ -533,6 +538,7 @@ function createScheduleMatchCard(match) {
 
     // Toggle expansion when clicking the card (but ignore clicks on interactive controls)
     matchCard.addEventListener('click', (e) => {
+        // Ignore interactive child elements so their native behavior is not hijacked.
         if (e.target.closest('a') || e.target.closest('button') || e.target.closest('input')) return;
         matchCard.classList.toggle('is-expanded');
         tipPanel.hidden = !matchCard.classList.contains('is-expanded');
@@ -628,6 +634,7 @@ function initializeScheduleSectionToggles() {
                 icon.className = isCollapsed ? 'fa fa-chevron-down' : 'fa fa-chevron-up';
         };
 
+        // Prevent duplicate event handlers when cards are rebuilt after new data fetches.
         if (!toggle.dataset.bound) {
             toggle.addEventListener('click', () => {
                 section.classList.toggle('is-collapsed');
@@ -664,7 +671,7 @@ async function getNews() {
     let articles = newsData['articles'] || [];
     // Show more articles on the news page (up to 50).
     // On the landing page respect `displayedNews` to limit visible items.
-    const onLandingPage = String(window.location.pathname || '').includes('index.html') || document.body.classList.contains('landing-page');
+    const onLandingPage = String(window.location.pathname || '').includes('index.html') || String(window.location.pathname || '') == "/" || document.body.classList.contains('landing-page');
     const maxDefault = onNewsPage ? 50 : (onLandingPage ? displayedNews : 12);
     const maxArticles = Math.min(maxDefault, articles.length);
 
