@@ -8,7 +8,7 @@ function renderItems(items) {
     if (!items.length) {
         const p = document.createElement('p');
         p.className = 'muted';
-        p.textContent = 'Keine Live‑Meldungen verfügbar.';
+        p.textContent = 'Keine Live-Meldungen verfügbar.';
         ticker.append(p);
         return;
     }
@@ -62,7 +62,7 @@ async function fetchLive() {
     }
     catch (e) {
         console.error('[liveticker] fetch error', e);
-        if (ticker) ticker.innerHTML = '<p class="muted">Live‑Daten konnten nicht geladen werden.</p>';
+        if (ticker) ticker.innerHTML = '<p class="muted">Live-Daten konnten nicht geladen werden.</p>';
     }
 }
 
