@@ -8,7 +8,7 @@
 import { TIME_CALCULATIONS, API_LINKS, FINALE_TIMESTAMP } from '../lib/utility/constants.js';
 
 const displayedMatches = 2;
-const displayedGroups = 5;
+const displayedGroups = 12;
 const displayedNews = 1;
 const isSchedulePage = document.body.classList.contains('schedule-page');
 
